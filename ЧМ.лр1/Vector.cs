@@ -22,6 +22,13 @@ namespace math_space
             Elem = new double[n];
         }
 
+        public void Print()
+        {
+            for (int i = 0; i < this.N; i++)
+                Console.Write(this.Elem[i] + "\t");
+        }
+
+
         // Копирование векторв в вектор
         public vector Copy()
         {
@@ -39,7 +46,7 @@ namespace math_space
             if (this.N != other.N)
                 throw new Exception("Unequal length\n");
 
-            double result = 0; 
+            double result = 0;
 
             for (int i = 0; i < N; i++)
                 result += this.Elem[i] * other.Elem[i];
@@ -64,6 +71,30 @@ namespace math_space
 
 
             return result;
+        }
+
+
+        public static vector operator -(vector v1, vector v2)
+        {
+            vector result = new vector(v1.N);
+
+            for (int i = 0; i < v1.N; i++)
+                result.Elem[i] = v1.Elem[i] - v2.Elem[i];
+
+
+            return result;
+
+
+        }
+
+        public double Norma()
+        {
+            double sum = .0;
+
+            for (int i = 0; i < this.N; i++)
+                sum += Math.Pow(this.Elem[i], 2);
+
+            return Math.Sqrt(sum);
         }
 
     }

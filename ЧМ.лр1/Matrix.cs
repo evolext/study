@@ -47,7 +47,7 @@ namespace math_space
             for (int i = 0; i < T.N; i++)
             {
                 for (int j = 0; j < T.M; j++)
-                    result.Elem[i] += T.Elem[i][j] * V.Elem[j];   
+                    result.Elem[i] += T.Elem[i][j] * V.Elem[j];
             }
             return result;
         }
@@ -83,7 +83,7 @@ namespace math_space
         public void Row_add(int i, int j, double coef)
         {
             for (int k = 0; k < this.M; k++)
-                this.Elem[j][k] += this.Elem[i][k] * coef; 
+                this.Elem[j][k] += this.Elem[i][k] * coef;
         }
 
         // Нахождение индекса строки с наибольшим элементом в столбце, k - вершина столбца, j - номер столбца
@@ -92,7 +92,7 @@ namespace math_space
             double max = .0;
             int res = k;
 
-            while(k < this.N)
+            while (k < this.N)
             {
                 if (Math.Max(max, Math.Abs(this.Elem[k][j])) != max)
                 {
@@ -108,10 +108,9 @@ namespace math_space
         // Приведение матрицы A к верхней треугольной U,
         // на вход также подается вектор b, потому что он тоже изменяется 
         // приперестановке строк и вычитании строк  
-        public matrix To_upper_triangle(vector b)
+        public matrix To_upper_triangle()
         {
             // Инициализация матрицы U
-            double temp;
             matrix result = new matrix(this.N, this.M);
             for (int i = 0; i < result.N; i++)
             {
@@ -128,21 +127,14 @@ namespace math_space
                 {
                     // перестановка строк для матрицы
                     result.Row_swap(i, k);
-                    // перестановка для вектора b
-                    temp = b.Elem[i];
-                    b.Elem[i] = b.Elem[k];
-                    b.Elem[k] = temp;
                 }
                 // Обнуляем элементы в столбце под наибольшим элементом
                 for (int j = i + 1; j < result.N; j++)
                 {
                     coef = -1 * result.Elem[j][i] / result.Elem[i][i];
                     result.Row_add(i, j, coef);
-
-                    // Изменяем вектор b
-                    b.Elem[j] += b.Elem[i] * coef;
                 }
-                    
+
             }
 
             return result;
@@ -189,10 +181,27 @@ namespace math_space
                     sum += this.Elem[i][k] * X.Elem[k];
                 X.Elem[i] = (b.Elem[i] - sum) / this.Elem[i][i];
             }
+            return X;
+        }
 
+
+        public vector Indirect_row(vector b)
+        {
+            vector X = new vector(this.N);
+            double sum = .0;
+            int k = 0;
+
+            for (int i = 0; i < N; i++)
+            {
+                for (sum = .0, k = 0; k < i; k++)
+                    sum += this.Elem[i][k] * X.Elem[k];
+                X.Elem[i] = (b.Elem[i] - sum) / this.Elem[i][i];
+            }
 
             return X;
         }
+
+
 
     }
 }
