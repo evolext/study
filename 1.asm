@@ -9,8 +9,11 @@ EXTERN CharToOemA@8: PROC
 EXTERN lstrlenA@4: PROC
 
 .DATA
+; строки для сообщений от системы
 STR1 DB "Введите первое число: ", 13,10,0
 STR2 DB "Введите второе число: ", 13,10,0
+STR_ERR DB "Ошибка: указаны недопустимые символы, введите число заново", 13,10,0
+
 LENS DD ?   ; кол-во введенных символов
 BUF DB 255 dup(?)
 SIGN DD ?   ; переменная для хранения знака
@@ -32,6 +35,12 @@ MOV EAX, OFFSET STR2
 PUSH EAX
 PUSH EAX
 CALL CharToOemA@8
+; Перекодируем строку с сообщеинем об ошибке
+MOV EAX, OFFSET STR_ERR
+PUSH EAX
+PUSH EAX
+CALL CharToOemA@8
+
 
 ; Получим дескриптор вывода
 PUSH -11
@@ -43,52 +52,84 @@ PUSH -10;
 CALL GetStdHandle@4
 MOV DIN, EAX
 
-; вывод первой строки
-PUSH OFFSET STR1    ; в стек помещается адрес строки
-CALL lstrlenA@4     ; длина первой строки в EAX
-; сам вывод
+input_first_number: 
+    ; вывод первой строки
+    PUSH OFFSET STR1    ; в стек помещается адрес строки
+    CALL lstrlenA@4     ; длина первой строки в EAX
+    ; сам вывод
+    PUSH 0
+    PUSH OFFSET LENS
+    PUSH EAX
+    PUSH OFFSET STR1
+    PUSH DOUT
+    CALL WriteConsoleA@20
+
+   ; ввод первого числа
+    PUSH 0
+    PUSH OFFSET LENS
+    PUSH 255
+    PUSH OFFSET BUF
+    PUSH DIN
+    CALL ReadConsoleA@20
+
+CALL CONVERTING         ; преобразование строки в число
+CMP BX, -1             ; проверяем, нет ли ошибки
+JNE save_first_number   ; сохраняем операнд, если нет ошибки
+
+; Вывод сообщения об ошибке
+PUSH OFFSET STR_ERR
+CALL lstrlenA@4
 PUSH 0
 PUSH OFFSET LENS
 PUSH EAX
-PUSH OFFSET STR1
+PUSH OFFSET STR_ERR
 PUSH DOUT
 CALL WriteConsoleA@20
+JMP input_first_number
 
 
-; Ввод первого числа
-PUSH 0
-PUSH OFFSET LENS
-PUSH 255
-PUSH OFFSET BUF
-PUSH DIN
-CALL ReadConsoleA@20
+save_first_number:    ; сохраняем первый операнд
+    MOV TEMP, EAX    
 
 
-CALL CONVERTING   ; преобразование строки в число
-MOV TEMP, EAX     ; сохраняем первый операнд
+input_second_number:
+    ; вывод второй строки
+    PUSH OFFSET STR2    ; в стек помещается адрес строки
+    CALL lstrlenA@4     ; длина первой строки в EAX
+    ; сам вывод
+    PUSH 0
+    PUSH OFFSET LENS
+    PUSH EAX
+    PUSH OFFSET STR2
+    PUSH DOUT
+    CALL WriteConsoleA@20
 
-
-; вывод второй строки
-PUSH OFFSET STR2    ; в стек помещается адрес строки
-CALL lstrlenA@4     ; длина первой строки в EAX
-; сам вывод
-PUSH 0
-PUSH OFFSET LENS
-PUSH EAX
-PUSH OFFSET STR2
-PUSH DOUT
-CALL WriteConsoleA@20
-
-; Ввод второго числа
-PUSH 0
-PUSH OFFSET LENS
-PUSH 255
-PUSH OFFSET BUF
-PUSH DIN
-CALL ReadConsoleA@20
+    ; Ввод второго числа
+    PUSH 0
+    PUSH OFFSET LENS
+    PUSH 255
+    PUSH OFFSET BUF
+    PUSH DIN
+    CALL ReadConsoleA@20
 
 CALL CONVERTING     ; преобразование второй строки в число
-SUB TEMP, EAX       ; вычитание двух чисел
+CMP BX, -1
+JNE subtraction
+
+; Вывод сообщения об ошибке
+PUSH OFFSET STR_ERR
+CALL lstrlenA@4
+PUSH 0
+PUSH OFFSET LENS
+PUSH EAX
+PUSH OFFSET STR_ERR
+PUSH DOUT
+CALL WriteConsoleA@20
+JMP input_second_number
+
+
+subtraction:
+    SUB TEMP, EAX       ; вычитание двух чисел
 
 
 
@@ -134,7 +175,6 @@ next:
 			 ; ECX = количество разрядов полученного числа
 
 
-   
  
 MOV LENS, ECX ; длина выводимой строки, оно же счетчик цикла
 ; выталкиваем число из стека в строку ответа
@@ -142,6 +182,8 @@ add_to_str:
     pop [ESI]   ; добавляем из стека в строку
     INC ESI
     LOOP add_to_str
+
+
 
 ; вывод строки ответа
 PUSH 0
@@ -180,8 +222,11 @@ CONVERTING PROC
 	    MOV BL, [ESI]	; помещаем символ из строки в BL
  
     cycle_body:         ; если символ - цифра
+        CMP BL, 13      ; проверка на конец строки
+        JE cycle_exit   ; ксли конец строки, то выходим из цикла
+
 	    CMP BL, 48 
-	    JL cycle_exit   ; BL < 48 => выходим из цикла, так как символ находится вне диапазона
+	    JL is_not_letter   ; BL < 48 => выходим из цикла, возможно, недопустимый символ
 	    CMP BL, 57
 	    JG is_uppercase_letter    ; BL > 57 => это не цифра, а буква
 	    ; символ строки - цифра
@@ -192,7 +237,7 @@ CONVERTING PROC
 
 	    is_uppercase_letter:    ; если символ - прописная буква
 		    CMP BL, 65 
-		    JL cycle_exit   ; BL < 65 => в диапазоне [57-65] , т.е. не буква
+		    JL is_not_letter   ; BL < 65 => в диапазоне [57-65] , т.е. не буква
 		    CMP BL, 70
 		    JG is_lowercase_letter   ; BL > 70 => это, возможно, строчная буква
 		    ; символ строки - прописная буква
@@ -204,18 +249,23 @@ CONVERTING PROC
 
         is_lowercase_letter:    ; если символ - строчная буква
             CMP BL, 97
-            JL cycle_exit   ; BL < 97 => в диапазоне [65,97], т.е. не буква
+            JL is_not_letter   ; BL < 97 => в диапазоне [65,97], т.е. не буква
             CMP BL, 102
-            JG cycle_exit   ; не буква
+            JG is_not_letter   ; не буква
             ; символ строки - строчная буква
             SUB BL, 'a'
             MUL EDI
             ADD EAX, EBX
             ADD EAX, 10
-    
+            JMP next
+
+        is_not_letter:     ; если недопустимый символ
+            MOV BX, -1     ; свой код ошибки
+            JMP cycle_exit  ; выход из цикла
+
 	    next:
 		    INC ESI      ; переход к следующему символу
-		    LOOP CONVERT ; возврат к началу цикла
+		    LOOP CONVERT ; возврат к началу цикла   
 
         cycle_exit:
             IMUL SIGN     ; устанавливаем знак
