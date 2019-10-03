@@ -6,26 +6,46 @@ using System.Threading.Tasks;
 
 namespace math_space
 {
-    public interface imatrix
+    public interface Imatrix
     {
         int N { get; set; }
         int M { get; set; }
     }
-    class matrix : imatrix
+    class Matrix : Imatrix
     {
         public int N { get; set; }
         public int M { get; set; }
         public double[][] Elem { set; get; }
 
-        public matrix() { }
+        public Matrix() { }
 
-        public matrix(int n, int m)
+        public Matrix(int n, int m)
         {
             N = n;
             M = m;
             Elem = new double[n][];
             for (int i = 0; i < n; i++)
                 Elem[i] = new double[m];
+        }
+        // Ввод матрицы
+        public void Input()
+        {
+            for (int i = 0; i < this.N; i++)
+            {
+                for (int j = 0; j < this.M; j++)
+                    this.Elem[i][j] = double.Parse(Console.ReadLine());
+            }
+            Console.Clear();
+        }
+        // Создание матрицы случайныых чисел
+        public void RandMatrix()
+        {
+            var r = new Random();
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                    this.Elem[i][j] = r.NextDouble() * 100;
+            }
         }
         // Вывод матрицы консоль
         public void Print()
@@ -37,13 +57,38 @@ namespace math_space
                 Console.Write("\n");
             }
         }
+        // Создание копии матрицы
+        public Matrix Copy()
+        {
+            Matrix Result = new Matrix(this.N, this.M);
+            for (int i = 0; i < this.N; i++)
+            {
+                for (int j = 0; j < this.M; j++)
+                    Result.Elem[i][j] = this.Elem[i][j];
+            }
+            return Result;
+        }
+        // транспонирование матрицы
+        public void Transpose()
+        {
+            double temp = .0;
+            for (int i = 0; i < this.N; i++)
+            {
+                for (int j = i; j < this.M; j++)
+                {
+                    temp = this.Elem[i][j];
+                    this.Elem[i][j] = this.Elem[j][i];
+                    this.Elem[j][i] = temp;
+                }
+            }
+        }
 
         // Умножение матрицы на веткор
-        public static vector operator *(matrix T, vector V)
+        public static Vector operator *(Matrix T, Vector V)
         {
             if (T.M != V.N)
                 throw new Exception("Unequal lengths\n");
-            vector result = new vector(V.N);
+            Vector result = new Vector(V.N);
             for (int i = 0; i < T.N; i++)
             {
                 for (int j = 0; j < T.M; j++)
@@ -53,11 +98,11 @@ namespace math_space
         }
 
         // Произведение матрицы на матрицу
-        public matrix Matrix_mult(matrix other)
+        public Matrix Matrix_mult(Matrix other)
         {
             if (this.M != other.N)
                 throw new Exception("Unequal length\n");
-            matrix result = new matrix(this.N, other.M);
+            Matrix result = new Matrix(this.N, other.M);
 
             for (int i = 0; i < this.N; i++)
             {
@@ -86,122 +131,12 @@ namespace math_space
                 this.Elem[j][k] += this.Elem[i][k] * coef;
         }
 
-        // Нахождение индекса строки с наибольшим элементом в столбце, k - вершина столбца, j - номер столбца
-        public int Master_elem(int k, int j)
-        {
-            double max = .0;
-            int res = k;
 
-            while (k < this.N)
-            {
-                if (Math.Max(max, Math.Abs(this.Elem[k][j])) != max)
-                {
-                    max = Math.Abs(this.Elem[k][j]);
-                    res = k;
-                }
-                k++;
-            }
-
-            return res;
-        }
-
-        // Приведение матрицы A к верхней треугольной U,
-        // на вход также подается вектор b, потому что он тоже изменяется 
-        // приперестановке строк и вычитании строк  
-        public matrix To_upper_triangle()
-        {
-            // Инициализация матрицы U
-            matrix result = new matrix(this.N, this.M);
-            for (int i = 0; i < result.N; i++)
-            {
-                for (int j = 0; j < result.M; j++)
-                    result.Elem[i][j] = this.Elem[i][j];
-            }
-
-            // Основное тело
-            int k = 0;
-            double coef = .0;
-            for (int i = 0; i < result.M - 1; i++)
-            {
-                if ((k = result.Master_elem(i, i)) != i) // Если бОльший элемент не в i-ой строке, то делаем перестановку
-                {
-                    // перестановка строк для матрицы
-                    result.Row_swap(i, k);
-                }
-                // Обнуляем элементы в столбце под наибольшим элементом
-                for (int j = i + 1; j < result.N; j++)
-                {
-                    coef = -1 * result.Elem[j][i] / result.Elem[i][i];
-                    result.Row_add(i, j, coef);
-                }
-
-            }
-
-            return result;
-        }
+    
 
         // Приведение матрицы А к нижней треугольной,
         // т.е. получение матрицы L, на вход подается
         // уже готовая матрица U
-        public matrix To_lower_triangle(matrix U)
-        {
-            matrix result = new matrix(this.N, this.M);
-            double sum = .0;
-            int k = 0;
-
-            for (int j = 0; j < this.M; j++)
-            {
-                int i = j;
-                result.Elem[i++][j] = 1;
-                for (; i < N; i++)
-                {
-                    for (sum = .0, k = 0; k <= j - 1; k++)
-                        sum += result.Elem[i][k] * U.Elem[k][j];
-                    result.Elem[i][j] = 1.0 / U.Elem[j][j] * (this.Elem[i][j] - sum);
-                }
-            }
-
-            return result;
-
-        }
-
-        // Прямой ход по строкам, применяется к матрице U
-        // на вход подаётся вектор b (измененный)
-        // т.е., сначала приводим матрицу А к верхней треугольной,
-        // потом вызываем эту функцию для получения решения СЛАУ
-        public vector Direct_row(vector b)
-        {
-            vector X = new vector(this.N);
-            double sum = .0;
-            int k = 0;
-
-            for (int i = this.N - 1; i >= 0; i--)
-            {
-                for (sum = .0, k = i + 1; k <= this.M - 1; k++)
-                    sum += this.Elem[i][k] * X.Elem[k];
-                X.Elem[i] = (b.Elem[i] - sum) / this.Elem[i][i];
-            }
-            return X;
-        }
-
-
-        public vector Indirect_row(vector b)
-        {
-            vector X = new vector(this.N);
-            double sum = .0;
-            int k = 0;
-
-            for (int i = 0; i < N; i++)
-            {
-                for (sum = .0, k = 0; k < i; k++)
-                    sum += this.Elem[i][k] * X.Elem[k];
-                X.Elem[i] = (b.Elem[i] - sum) / this.Elem[i][i];
-            }
-
-            return X;
-        }
-
-
-
+        
     }
 }

@@ -3,90 +3,93 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Diagnostics;
 
 namespace math_space
 {
+    class CONST
+    {
+        public static double Eps = 10e-9;
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-
             int N = 500;
+            Matrix A = new Matrix(N, N);
+            //Vector b = new Vector(N);
 
-            //matrix A = new matrix(N, N);
-            //Console.WriteLine("Введите матрицу:");
+
+            StreamReader sr = new StreamReader(@"C:\Users\evole\source\repos\ЧМ.лр1\ЧМ.лр1\Input.txt");
 
             //for (int i = 0; i < N; i++)
             //{
             //    for (int j = 0; j < N; j++)
-            //        A.Elem[i][j] = double.Parse(Console.ReadLine());
+            //        A.Elem[i][j] = double.Parse(sr.ReadLine());
             //}
 
-            //Console.WriteLine("Введите вектор:");
-            //vector b = new vector(N);
             //for (int i = 0; i < N; i++)
-            //    b.Elem[i] = double.Parse(Console.ReadLine());
+            //    b.Elem[i] = double.Parse(sr.ReadLine());
+
+            sr.Close();
 
 
-            //matrix U = A.To_upper_triangle();
-            //matrix L = A.To_lower_triangle(U);
+            A.RandMatrix();
 
-            //vector y = L.Indirect_row(b);
-
-            //vector x = U.Direct_row(y);
-
-            //x.Print();
-
-            vector X_true = new vector(N);
+            Vector X_true = new Vector(N);
             for (int i = 0; i < N; i++)
                 X_true.Elem[i] = 1.0;
 
-
-            matrix A = new matrix(N, N);
-            for (int i = 0; i < N; i++)
-            {
-                A.Elem[i][i] = 1.0e-3;
-                for (int j = i + 1; j < N; j++)
-                {
-                    A.Elem[i][j] = 1.0 * (i + j + 1);
-                    A.Elem[j][i] = -1.0 * (i + j + 1);
-                }
-
-            }
-
-            vector f = A * X_true;
-
-            matrix U = A.To_upper_triangle();
-            matrix L = A.To_lower_triangle(U);
-
-            vector y = L.Indirect_row(f);
-            vector X = U.Direct_row(y);
+            Vector f = A * X_true;
 
 
-            vector X2 = X_true - X;
-            double Epsilon = X2.Norma() / X.Norma();
 
-            Console.WriteLine(Epsilon);
+            // Замер времени
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+
+            //// do something
+
+            //QR_decomposition.Solve_Slough(A, b);
+
+
+            //sw.Stop();
+
+            //TimeSpan ts = sw.Elapsed;
+            //Console.WriteLine(ts.ToString());
 
 
 
 
+            Vector X = QR_decomposition.Solve_Slough(A, f);
+
+
+
+            Vector X2 = X - X_true;
+            double Eps = X2.Norma() / X_true.Norma();
+            Console.WriteLine(Eps);
             
 
 
 
 
 
-            //var r = new Random();
-            //for (int i = 0; i < N; i++)
-            //{
-            //    for (int j = 0; j < N; j++)
-            //        A.Elem[i][j] = r.NextDouble() * 100;
-            //    A.Elem[i][i] = 0.01;
-            //}
 
 
-           
+
+
+            //Vector b = new Vector(N);
+            //b.Input();
+
+            //Vector X = QR_decomposition.Solve_Slough(A, b);
+            //X.Print();
+
+            
+
+
+
 
 
 

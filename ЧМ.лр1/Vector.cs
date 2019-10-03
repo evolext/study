@@ -11,28 +11,35 @@ namespace math_space
         int N { get; set; } //size
     }
 
-    class vector : Ivector
+    class Vector : Ivector
     {
         public int N { set; get; }
         public double[] Elem { set; get; }
-        public vector() { }
-        public vector(int n)
+        public Vector() { }
+        public Vector(int n)
         {
             N = n;
             Elem = new double[n];
         }
-
+        // Ввод вектора
+        public void Input()
+        {
+            for (int i = 0; i < this.N; i++)
+            {
+                this.Elem[i] = double.Parse(Console.ReadLine());
+            }
+            Console.Clear();
+        }
+        // ВЫвод вектора в консоль
         public void Print()
         {
             for (int i = 0; i < this.N; i++)
                 Console.Write(this.Elem[i] + "\t");
         }
-
-
         // Копирование векторв в вектор
-        public vector Copy()
+        public Vector Copy()
         {
-            vector result = new vector(N);
+            Vector result = new Vector(N);
 
             for (int i = 0; i < N; i++)
                 result.Elem[i] = this.Elem[i];
@@ -41,7 +48,7 @@ namespace math_space
         }
 
         // Скалярное произведение
-        public double Scalar_product(vector other)
+        public double Scalar_product(Vector other)
         {
             if (this.N != other.N)
                 throw new Exception("Unequal length\n");
@@ -56,12 +63,12 @@ namespace math_space
         }
 
         // Умножение столбца на строку
-        public matrix Column_mult_row(vector other)
+        public Matrix Column_mult_row(Vector other)
         {
             if (this.N != other.N)
                 throw new Exception("Unequal length\n");
 
-            matrix result = new matrix(this.N, this.N);
+            Matrix result = new Matrix(this.N, this.N);
 
             for (int i = 0; i < this.N; i++)
             {
@@ -73,10 +80,10 @@ namespace math_space
             return result;
         }
 
-
-        public static vector operator -(vector v1, vector v2)
+        // Вычитание векторов 
+        public static Vector operator -(Vector v1, Vector v2)
         {
-            vector result = new vector(v1.N);
+            Vector result = new Vector(v1.N);
 
             for (int i = 0; i < v1.N; i++)
                 result.Elem[i] = v1.Elem[i] - v2.Elem[i];
@@ -86,7 +93,7 @@ namespace math_space
 
 
         }
-
+        // Вычисление нормы вектора по норме-2 
         public double Norma()
         {
             double sum = .0;
