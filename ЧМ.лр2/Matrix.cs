@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
 
 namespace math_space
 {
@@ -27,6 +29,107 @@ namespace math_space
             for (int i = 0; i < n; i++)
                 Elem[i] = new double[m];
         }
+
+        //Считывание бинарных файлов
+        public Matrix(string PATH)
+        {
+            // Размер системы
+            using (var Reader = new BinaryReader(File.Open(PATH + "Size.bin", FileMode.Open))) // путь можно написать как \\DATA где data папка с файлами
+            {
+                this.N = Reader.ReadInt32();
+                this.M = this.N;
+            }
+
+            using (var Reader = new BinaryReader(File.Open(PATH + "Matrix.bin", FileMode.Open)))
+            {
+                try
+                {
+                    this.Elem = new double[N][];
+                    for (int i = 0; i < M; i++)
+                    {
+                        this.Elem[i] = new double[N];
+                        for (int j = 0; j < N; j++)
+                            this.Elem[i][j] = Reader.ReadDouble();
+                    }
+                }
+                catch { throw new Exception("Matrix: data file is not correct..."); }
+            }
+        }
+
+
+
+
+
+        delegate void Thread_Solver(int Number);
+
+        public double Cond_Matrix()
+        {
+            // Обрабатываем только квадратные матрицы
+            if (M != N) throw new Exception("ERORR");
+            // тут будет QR- разложение транспонированной A методом Хаусхолдера
+            int Number_Threads = Environment.ProcessorCount;
+
+            var Semaphores = new bool[Number_Threads];
+            var Norma_Row_A = new double[Number_Threads];
+            var Norma_Row_A1 = new double[Number_Threads];
+
+            var Start_Solver = new Thread_Solver(Number =>
+            {
+                var A1 = new Vector(this.M); // мб тут должна быть N, но матрица квадратная
+                double S1, S2;
+                int begin, end; // индексы первой и последней строк, обрабатываемой потоком текущим
+
+                begin = N / Number_Threads * Number; // первая строка обрабатываемая текущим потоком
+                end = begin + this.N / Number_Threads;
+
+                // Если колиечство строк не кратно количеству потоков
+                if (Number + 1 == Number_Threads)
+                    end += N % Number_Threads;
+
+                for (int i = begin; i < end; i++) // Система для текущего потока
+                {
+                    A1.Elem[i] = 1.0;
+
+                    // Решение
+                    //A1 = QR_decomposition.Solve_Slough(A1); // Тут решение Хаусхолдером
+                    S1 = .0;
+                    S2 = .0;
+
+                    for (int j = 0; j < M; j++) // M or n?
+                    {
+                        S1 += Math.Abs(Elem[i][j]);
+                        S2 += Math.Abs(Elem[i][j]);
+                        A1.Elem[j] = 0;
+                    }
+                    if (Norma_Row_A[Number] < S1) Norma_Row_A[Number] = S1;
+                    if (Norma_Row_A1[Number] < S2) Norma_Row_A1[Number] = S2;
+                }
+
+                Semaphores[Number] = true;
+            });
+            for (int I = 0; I < Number_Threads - 1; I++)
+            {
+                int Number = Number_Threads - I - 1;
+                ThreadPool.QueueUserWorkItem(Par => Start_Solver(Number));
+            }
+            Start_Solver(0);
+            while (Array.IndexOf<bool>(Semaphores, false) != -1) ;
+
+            //
+            for (int i = 1; i < Number_Threads; i++)
+            {
+                if (Norma_Row_A[0] < Norma_Row_A[i])
+                    Norma_Row_A[0] = Norma_Row_A[i];
+                if (Norma_Row_A1[0] < Norma_Row_A1[i])
+                    Norma_Row_A1[0] = Norma_Row_A1[i];
+            }
+
+            return Norma_Row_A[0] * Norma_Row_A1[0];
+        }
+
+
+
+
         // Ввод матрицы
         public void Input()
         {

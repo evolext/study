@@ -10,15 +10,17 @@ namespace math_space
     {
         static void Main(string[] args)
         {
-            int N = 3;
-            Matrix A = new Matrix(N, N);
-            A.Input();
+            string path = @"C:\Users\evole\OneDrive\Рабочий стол\System3\";
 
-            Vector X = new Vector(N);
+            int N = 2;
+            Matrix A = new Matrix(N, N);
             Vector b = new Vector(N);
+            Vector X = new Vector(N);
+
+            A.Input();
             b.Input();
 
-            Jacobi_method.Procedure(A, b, X, 1e-3);
+            SOR_method.Procedure(A, b, X, 0.5, 10e-3);
 
             X.Print();
 

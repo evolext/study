@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace math_space
 {
@@ -21,6 +22,30 @@ namespace math_space
             N = n;
             Elem = new double[n];
         }
+
+        // Считывание из бинарного фалйа
+        public Vector(string PATH)
+        {
+            // Размер системы
+            using (var Reader = new BinaryReader(File.Open(PATH + "Size.bin", FileMode.Open))) // путь можно написать как \\DATA где data папка с файлами
+                this.N = Reader.ReadInt32();
+
+            // Считывание элементов
+            using (var Reader = new BinaryReader(File.Open(PATH + "F.bin", FileMode.Open)))
+            {
+                try
+                {
+                    this.Elem = new double[N];
+                    for (int i = 0; i < N; i++)
+                        this.Elem[i] = Reader.ReadDouble();
+
+                }
+                catch { throw new Exception("Matrix: data file is not correct..."); }
+            }
+
+
+        }
+
         // Ввод вектора
         public void Input()
         {
