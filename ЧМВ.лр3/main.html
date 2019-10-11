@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Главная страница</title>
+      <style>
+         #menu li
+         {
+            display: inline;
+         }
+         #menu li a
+         {
+            display: inline-block;
+         }
+         #search
+         {
+            margin-left: 40%;
+         }
+         #notice
+         {
+            width: 20%;
+            border: black solid 1px;
+            margin-left: 70%; 
+         }
+         #results
+         {
+            width: 40%;
+            border: black solid 1px;
+            float: left;
+         }
+         #registration
+         {
+           width: 20%;
+           float: left;
+         }
+         #userMenu ul
+         {
+            display: none;
+            position: absolute;
+         }
+         #userMenu:hover ul
+         {
+            display: block;
+         }
+         #userMenu:hover ul li
+         {
+            display: block;
+         }
+      </style>
+   </head>
+   <body>
+      <!--Шапка сайта-->
+      <ul id="menu">
+         <li title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+         <li id="userMenu">Личный кабинет
+            <ul>
+               <li title="Посмотреть список бронирований"><a href="resrvation.html">Список бронирвоаний</a></li>
+               <li title="Добавить новую книгу в каталог"><a href="">Добавление новой книги</a></li>
+               <li title="Удалить книгу из каталога"><a href="">Удаление книги</a></li>
+               <li title=""><a href="">Получить список пользователей</a></li>
+            </ul>
+         </li>
+         <li title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></li>
+      </ul>
+      <!--Поисковик-->
+      <form id="search" onsubmit="return validate();">
+         <input type="text" placeholder="Поиск" id="searchPlace" pattern="^[А-Яа-яЁё\s]+$" required title="Вводите слова на русском">
+         <button type="submit" title="Начать поиск">Поиск</button>
+      </form>
+      <!--Форма для регистрации-->
+      <form id="registration"> 
+         <fieldset>
+            <legend>Вход в систему</legend>
+            <p>Логин: <input type="text"></p>
+            <p>Пароль: <input type="password"></p>
+            <p><button>Войти</button> <button>Зарегистрироваться</button></p>
+         </fieldset>
+      </form>
+
+      <script>
+         function validate()
+         {
+            var searchPlace = document.getElementById("searchPlace");
+
+            if (!searchPlace.value)
+            {
+               alert("Ошибка: поле для поиска не заполнено!");
+               searchPlace.style.backgroundColor = red;
+               return false;
+            }
+         }
+      </script>
+
+
+      <!--Результаты поиска-->
+      <div id="results">
+         Тут результаты поиска
+      </div>
+      <!--Уведомления-->
+      <div id="notice">
+         Уведомления тут
+      </div>
+
+
+   </body>
+</html>

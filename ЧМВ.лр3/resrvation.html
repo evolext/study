@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+   <meta charset="UTF-8">
+   <title>Список бронирований</title>
+   <style>
+      li
+      {
+         display: inline;
+      }     
+      li a
+      {
+        display: inline-block;
+      }
+      #header
+      {
+         margin-left: 40%;
+      }
+      table
+      {
+         border-collapse: collapse;
+      }
+      td
+      {
+         border: 1px solid black;
+      }
+      #userMenu ul
+      {
+         display: none;
+         position: absolute;
+      }
+      #userMenu:hover ul
+      {
+         display: block;
+      }
+      #userMenu:hover ul li
+      {
+         display: block;
+      }
+   </style>
+</head>
+<body>
+   <!--Шапка сайта-->
+   <ul id="menu">
+      <li title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+      <li id="userMenu">Личный кабинет
+         <ul>
+            <li title="Посмотреть список бронирований"><a href="resrvation.html">Список бронирвоаний</a></li>
+            <li title="Добавить новую книгу в каталог"><a href="">Добавление новой книги</a></li>
+            <li title="Удалить книгу из каталога"><a href="">Удаление книги</a></li>
+            <li title=""><a href="">Получить список пользователей</a></li>
+         </ul>
+      </li>
+      <li title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></li>
+   </ul>
+   
+   <p id="header">Список бронирований</p>
+   <p>Имя пользователя</p>
+   <table>
+      <tr>
+         <td>Автор</td>
+         <td>Название</td>
+         <td>Количество</td>
+         <td>Срок возврата</td>
+      </tr>
+      <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+      </tr>
+   </table>
+</body>
+</html>

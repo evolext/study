@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Расширенный поиск</title>
+      <style>
+         li
+         {
+            display: inline;
+         }     
+         li a
+         {
+            display: inline-block;
+         }
+         #search
+         {
+            float: left;
+            width: 30%;
+         }
+         #results
+         {
+            width: 50%;
+            display: inline-block;
+            border: 1px solid black;
+         }
+         #userMenu ul
+         {
+            display: none;
+            position: absolute;
+         }
+         #userMenu:hover ul
+         {
+            display: block;
+         }
+         #userMenu:hover ul li
+         {
+            display: block;
+         }
+      </style>
+   </head>
+   <body>
+      <!--Шапка сайта-->
+      <ul id="menu">
+         <li title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+         <li id="userMenu">Личный кабинет
+            <ul>
+               <li title="Посмотреть список бронирований"><a href="resrvation.html">Список бронирвоаний</a></li>
+               <li title="Добавить новую книгу в каталог"><a href="">Добавление новой книги</a></li>
+               <li title="Удалить книгу из каталога"><a href="">Удаление книги</a></li>
+               <li title=""><a href="">Получить список пользователей</a></li>
+            </ul>
+         </li>
+         <li title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></li>
+      </ul>
+      <!--Форма для поиска-->
+      <form id="search" onsubmit="return validate();">
+         <fieldset>
+            <legend>Расширенный поиск</legend>
+            <p title="Укажите одного или более авторов, слова на русском языке без точек">Автор: <input type="text" id="authorBook" pattern="^[А-Яа-яЁё]+$"></p>
+            <p title="Укажите название кинги, слова на русском языке без точек">Название: <input type="text" id="titleBook" pattern="^[А-Яа-яЁё]+$"></p>
+            <p title="Укажите год публикации, вводить только цифры">Год публикации: <input type="text" id="yearBook" pattern="[0-9]{4}"></p>
+            <p title="ISBN - уникальный номер книги, обычно указывается рядом со штрих-кодом, вводить только цифры">ISBN: <input type="text" id="isbnBook" pattern="^[ 0-9]+$"></p>
+            <p title="Укажите любую информацию по книге, вводить слова на русском языке">"Все поля": <input type="text" id="allFields" pattern="^[А-Яа-яЁё]+$"></p>
+
+            <p title="Начать поиск"><button>Поиск</button></p>
+         </fieldset>
+      </form>
+
+      <!--Функция валидации формы-->
+      <script>
+         function validate() 
+         {
+            var authorBook = document.getElementById("authorBook");
+            var titleBook = document.getElementById("titleBook");
+            var yearBook = document.getElementById("yearBook");
+            var isbnBook = document.getElementById("isbnBook");
+            var allFields = document.getElementById("allFields");
+            // Должно быть заполнено хотя бы одно из полей
+            if (!authorBook.value && !titleBook.value && !yearBook.value && !isbnBook.value && !allFields.value)
+            {
+               alert("Ошибка: заполните хотя бы одно поле для поиска!");
+               return false;
+            }
+
+         }
+      </script>
+
+
+      <div id="results">
+         Результаты поиска
+      </div>
+
+   </body>
+</html>
