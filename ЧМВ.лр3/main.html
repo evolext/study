@@ -2,104 +2,151 @@
    <head>
       <meta charset="UTF-8">
       <title>Главная страница</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
       <style>
-         #menu li
-         {
-            display: inline;
-         }
-         #menu li a
-         {
-            display: inline-block;
-         }
          #search
          {
             margin-left: 40%;
-         }
-         #notice
-         {
-            width: 20%;
-            border: black solid 1px;
-            margin-left: 70%; 
-         }
-         #results
-         {
-            width: 40%;
-            border: black solid 1px;
-            float: left;
          }
          #registration
          {
            width: 20%;
            float: left;
+           margin-top: 0;
+           margin-left: 15px;
+           border: 1px solid black;
          }
-         #userMenu ul
+         #registration span
          {
-            display: none;
-            position: absolute;
+            margin-left: 2%;
+            display:  inline-block;
+            width: 10%;
          }
-         #userMenu:hover ul
+         #registration input
          {
-            display: block;
+            display: inline-block;
+            margin-left: 15%;
+            width: 50%;
          }
-         #userMenu:hover ul li
+
+         #notice
          {
-            display: block;
+            margin-left: 15px;
+            margin-top: 10px;
+            clear: both;
+            border: 1px solid black;
+            width: 20%;
+            overflow: hidden;
+            float: left;
+         }
+         #results
+         {
+            margin-left: 23%;
+            margin-top: 0;
+            width: 75%;
+            border: 1px solid black;
+            overflow: hidden;
+         }
+         #toComeIn
+         {
+            margin-left: 5%;
+         }
+         #join
+         {
+            margin-left: 7%;
+         }
+
+         #noticeTitle, #registrationTitle
+         {
+            text-align: center;
+            margin: 0;
+            background-color: rgb(223, 223, 223);
+         }
+
+         #search
+         {
+            margin-left: 0;
          }
       </style>
    </head>
    <body>
+      <header>
+         <p>Новосибирский книжный каталог</p>
+      </header>
       <!--Шапка сайта-->
-      <ul id="menu">
-         <li title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
-         <li id="userMenu">Личный кабинет
-            <ul>
-               <li title="Посмотреть список бронирований"><a href="resrvation.html">Список бронирвоаний</a></li>
-               <li title="Добавить новую книгу в каталог"><a href="">Добавление новой книги</a></li>
-               <li title="Удалить книгу из каталога"><a href="">Удаление книги</a></li>
-               <li title=""><a href="">Получить список пользователей</a></li>
-            </ul>
-         </li>
-         <li title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></li>
-      </ul>
-      <!--Поисковик-->
-      <form id="search" onsubmit="return validate();">
-         <input type="text" placeholder="Поиск" id="searchPlace" pattern="^[А-Яа-яЁё\s]+$" required title="Вводите слова на русском">
-         <button type="submit" title="Начать поиск">Поиск</button>
-      </form>
-      <!--Форма для регистрации-->
-      <form id="registration"> 
-         <fieldset>
-            <legend>Вход в систему</legend>
-            <p>Логин: <input type="text"></p>
-            <p>Пароль: <input type="password"></p>
-            <p><button>Войти</button> <button>Зарегистрироваться</button></p>
-         </fieldset>
-      </form>
+      <table>
+         <tr>
+            <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li></td>
+            <td id="userMenu">
+               <p>Личный кабинет</p>
+                  <ul> 
+                     <li><a href="resrvation.html">Список бронирвоаний</a></li>
+                     <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
+                     <li title=""><a href="">Получить список пользователей</a></li>
+                  </ul>
+               </div>
+            </td>
+            <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
+            <td id="col4">
 
-      <script>
-         function validate()
-         {
-            var searchPlace = document.getElementById("searchPlace");
+            </td>
+         </tr>
+         <tr id="secondRaw">
+            <!--Поисковик-->
+            <td colspan="4">
+               <form id="search" onsubmit="return validate();">
+                  <input type="text" placeholder="Поиск" id="searchPlace" pattern="^[А-Яа-яЁё\s]+$" required
+                     title="Вводите слова на русском">
+                  <button type="submit" title="Начать поиск">Поиск</button>
+                  <a href="advanced_search.html">Расширенный поиск</a>
+               </form>
+            </td>
+         </tr>
+      </table>
 
-            if (!searchPlace.value)
+
+            
+            <!--Форма для регистрации-->
+            <form id="registration"> 
+                  <p id="registrationTitle">Вход в систему</p>
+                  <p><span>Логин:</span> <input type="text"></p>
+                  <p><span>Пароль:</span> <input type="password"></p>
+                  <p><button id="toComeIn">Войти</button> <button id="join">Зарегистрироваться</button></p>
+            </form>
+
+            <script>
+            function validate()
             {
-               alert("Ошибка: поле для поиска не заполнено!");
-               searchPlace.style.backgroundColor = red;
-               return false;
+               var searchPlace = document.getElementById("searchPlace");
+
+               if (!searchPlace.value)
+               {
+                  alert("Ошибка: поле для поиска не заполнено!");
+                  searchPlace.style.backgroundColor = red;
+                  return false;
+               }
             }
-         }
-      </script>
+            </script>
+
+         
 
 
-      <!--Результаты поиска-->
-      <div id="results">
-         Тут результаты поиска
-      </div>
-      <!--Уведомления-->
-      <div id="notice">
-         Уведомления тут
-      </div>
+            
+            
+            <!--Уведомления-->
+            <div id="notice">
+               <p id="noticeTitle">Уведомления</p>
+               <p>Уведомление 1</p>
+               <p>Уведомление 2</p>
+               <p>Уведомление 3</p>
+            </div>
 
+            <!--Результаты поиска-->
+            <div id="results">
+               Тут результаты поиска
+            </div>
+      
 
    </body>
 </html>

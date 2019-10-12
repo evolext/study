@@ -2,15 +2,9 @@
    <head>
       <meta charset="UTF-8">
       <title>Расширенный поиск</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
       <style>
-         li
-         {
-            display: inline;
-         }     
-         li a
-         {
-            display: inline-block;
-         }
          #search
          {
             float: left;
@@ -22,47 +16,101 @@
             display: inline-block;
             border: 1px solid black;
          }
-         #userMenu ul
+
+         form
          {
-            display: none;
-            position: absolute;
+            margin-left: 10px;
+            margin-right: 10px;
+            border: 1px solid black;
          }
-         #userMenu:hover ul
+         #searchTitle
          {
-            display: block;
+            margin: 0;
+            text-align: center;
+            background-color: rgb(202, 199, 199);
          }
-         #userMenu:hover ul li
+
+         #formSearch td
          {
-            display: block;
+            border: none;
          }
+         .column1
+         {
+            padding-top: 5px;
+            padding-left: 5%;
+            text-align: left;
+            width: 30%;
+         }
+         .column2
+         {
+            padding-top: 5px;
+         }
+         .column2 input
+         {
+            display: inline-block;
+            width: 70%;
+         }
+         tr button
+         {
+            display: inline-block;
+            width: 20%;
+            margin-top: 20px;
+         }
+
       </style>
    </head>
    <body>
+      <header>
+         <p>Новосибирский книжный каталог</p>
+      </header>
       <!--Шапка сайта-->
-      <ul id="menu">
-         <li title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
-         <li id="userMenu">Личный кабинет
+   <table>
+      <tr>
+         <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+         </td>
+         <td id="userMenu">
+            <p>Личный кабинет</p>
             <ul>
-               <li title="Посмотреть список бронирований"><a href="resrvation.html">Список бронирвоаний</a></li>
-               <li title="Добавить новую книгу в каталог"><a href="">Добавление новой книги</a></li>
-               <li title="Удалить книгу из каталога"><a href="">Удаление книги</a></li>
+               <li><a href="resrvation.html">Список бронирвоаний</a></li>
+               <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
                <li title=""><a href="">Получить список пользователей</a></li>
             </ul>
-         </li>
-         <li title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></li>
-      </ul>
+            </div>
+         </td>
+         <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
+         <td id="col4">
+         </td>
+      </tr>
+   </table>
       <!--Форма для поиска-->
       <form id="search" onsubmit="return validate();">
-         <fieldset>
-            <legend>Расширенный поиск</legend>
-            <p title="Укажите одного или более авторов, слова на русском языке без точек">Автор: <input type="text" id="authorBook" pattern="^[А-Яа-яЁё]+$"></p>
-            <p title="Укажите название кинги, слова на русском языке без точек">Название: <input type="text" id="titleBook" pattern="^[А-Яа-яЁё]+$"></p>
-            <p title="Укажите год публикации, вводить только цифры">Год публикации: <input type="text" id="yearBook" pattern="[0-9]{4}"></p>
-            <p title="ISBN - уникальный номер книги, обычно указывается рядом со штрих-кодом, вводить только цифры">ISBN: <input type="text" id="isbnBook" pattern="^[ 0-9]+$"></p>
-            <p title="Укажите любую информацию по книге, вводить слова на русском языке">"Все поля": <input type="text" id="allFields" pattern="^[А-Яа-яЁё]+$"></p>
+            <p id="searchTitle" >Расширенный поиск</p>
 
-            <p title="Начать поиск"><button>Поиск</button></p>
-         </fieldset>
+            <table id="formSearch">
+               <tr title="Укажите одного или более авторов, слова на русском языке">
+                  <td class="column1">Автор:</td>
+                  <td class="column2"><input type="text" id="authorBook" pattern="^^[А-Яа-яЁё\.\s]+$"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Название:</td>
+                  <td class="column2"><input type="text" id="titleBook" pattern="^[А-Яа-яЁё\.\s]+$"></td>
+               </tr>
+               <tr title="Укажите год публикации, вводить только цифры">
+                  <td class="column1">Год публикации: </td>
+                  <td class="column2"><input type="text" id="yearBook" pattern="[0-9]{4}"></td>
+               </tr>
+               <tr title="ISBN - уникальный номер книги, обычно указывается рядом со штрих-кодом, вводить только цифры">
+                  <td class="column1">Номер ISBN:</td>
+                  <td class="column2"><input type="text" id="isbnBook" pattern="^[ 0-9]+$"></td>
+               </tr>
+               <tr title="Укажите любую информацию по книге, вводить слова на русском языке">
+                  <td class="column1">"Все поля":</td>
+                  <td class="column2"><input type="text" id="allFields" pattern="^[А-Яа-яЁё]+$"></td>
+               </tr>
+               <tr>
+                  <td colspan="2" id="serchStart"><button title="Начать поиск">Поиск</button></td>
+               </tr>
+            </table>
       </form>
 
       <!--Функция валидации формы-->

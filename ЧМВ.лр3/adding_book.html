@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Добавление книги</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+      <style>
+         form
+         {
+            width: 30%;
+         }
+      </style>
+   </head>
+   <body>
+      <header>
+         <p>Новосибирский книжный каталог</p>
+      </header>
+      <!--Шапка сайта-->
+      <table>
+         <tr>
+            <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+            </td>
+            <td id="userMenu">
+               <p>Личный кабинет</p>
+               <ul>
+                  <li><a href="resrvation.html">Список бронирвоаний</a></li>
+                  <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
+                  <li title=""><a href="">Получить список пользователей</a></li>
+               </ul>
+               </div>
+            </td>
+            <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
+            <td id="col4">
+      
+            </td>
+         </tr>
+      </table>
+
+      <div>
+         <p>Добавление товара</p>
+         <form onsubmit="return validation();">
+            <fieldset>
+               <p>Информация о товаре</p>
+               <p>Авторы/авторы: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="authors"></p>
+               <p>Название книги: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="title"></p>
+               <p>Издательство: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="publishing"></p>
+               <p>Год издания: <input type="text" pattern="[0-9]{4}" title="Вводить только четыре цифры" id="year"></p>
+               <p>Номер ISBN: <input type="text" pattern="^[0-9]+$" title="Вводить только цифры" id="isbn"></p>
+               <p>Количество: <input type="number" value="1" min="1" id="count"></p>
+               <p><button type="submit" title="Добавить новую запись">Добавить</button></p>
+            </fieldset>
+         </form>
+
+         <script>
+            function validation() 
+            {
+                var authors = document.getElementById("authors");
+                var title = document.getElementById("title");
+                var publishing = document.getElementById("publishing");
+                var year = document.getElementById("year");
+                var isbn = document.getElementById("isbn");
+
+               if (!authors.value || !title.value || !publishing.value || !year.value || !isbn.value) 
+               {
+                  alert("Ошибка: заполните всю информацию о книге!");
+                  return false;
+               }
+
+            }
+         </script>
+      </div>
+      
+
+
+
+   </body>
+</html>
