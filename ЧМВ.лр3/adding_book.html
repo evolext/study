@@ -4,16 +4,55 @@
       <title>Добавление книги</title>
       <link rel="stylesheet" href="style.css">
       <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
       <style>
+         div
+         {
+            margin-left: 35%;
+            margin-right: 35%;
+            padding: 0;
+         }
+         div p
+         {
+            text-align: center;
+            margin-bottom: 15px;
+         }
          form
          {
-            width: 30%;
+            border: 1px solid black;
+            
          }
+         #formTitle
+         {
+            margin-top: 0;
+            background-color: rgb(39, 170, 226);
+         }
+         .column1
+         {
+            width: 35%;
+            padding: 5px;
+            text-align: left;
+         }
+         .column2 input
+         {
+
+            width: 90%;
+         }
+         button[type="submit"]
+         {
+            margin: 10px 0;
+         }
+         form table td
+         {
+            border: none;
+         }
+         
+
       </style>
    </head>
    <body>
       <header>
-         <p>Новосибирский книжный каталог</p>
+         <p><a href="main.html"><img src="book.png" width="70px"></a>Новосибирский книжный каталог</p>
       </header>
       <!--Шапка сайта-->
       <table>
@@ -23,7 +62,7 @@
             <td id="userMenu">
                <p>Личный кабинет</p>
                <ul>
-                  <li><a href="resrvation.html">Список бронирвоаний</a></li>
+                  <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
                   <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
                   <li title=""><a href="">Получить список пользователей</a></li>
                </ul>
@@ -39,16 +78,36 @@
       <div>
          <p>Добавление товара</p>
          <form onsubmit="return validation();">
-            <fieldset>
-               <p>Информация о товаре</p>
-               <p>Авторы/авторы: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="authors"></p>
-               <p>Название книги: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="title"></p>
-               <p>Издательство: <input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="publishing"></p>
-               <p>Год издания: <input type="text" pattern="[0-9]{4}" title="Вводить только четыре цифры" id="year"></p>
-               <p>Номер ISBN: <input type="text" pattern="^[0-9]+$" title="Вводить только цифры" id="isbn"></p>
-               <p>Количество: <input type="number" value="1" min="1" id="count"></p>
-               <p><button type="submit" title="Добавить новую запись">Добавить</button></p>
-            </fieldset>
+            <p id="formTitle">Информация о товаре</p>
+            <table id="addingBook">
+               <tr>
+                  <td class="column1">Авторы/авторы:</td>
+                  <td class="column2"><input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="authors"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Название книги:</td>
+                  <td class="column2"><input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="title"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Издательство:</td>
+                  <td class="column2"><input type="text" pattern="^[А-Яа-яЁё\.\s]+$" id="publishing"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Год издания:</td>
+                  <td class="column2"><input type="text" pattern="[0-9]{4}" title="Вводить только четыре цифры" id="year"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Номер ISBN:</td>
+                  <td class="column2"><input type="text" pattern="^[0-9]+$" title="Вводить только цифры" id="isbn"></td>
+               </tr>
+               <tr>
+                  <td class="column1">Количество:</td>
+                  <td class="column2"><input type="number" value="1" min="1" id="count"></td>
+               </tr>
+               <tr>
+                  <td colspan="2"><button type="submit" title="Добавить новую запись">Добавить</button></td>
+               </tr>
+            </table>
          </form>
 
          <script>

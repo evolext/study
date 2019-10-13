@@ -4,6 +4,7 @@
       <title>Расширенный поиск</title>
       <link rel="stylesheet" href="style.css">
       <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
       <style>
          #search
          {
@@ -27,7 +28,7 @@
          {
             margin: 0;
             text-align: center;
-            background-color: rgb(202, 199, 199);
+            background-color: rgb(39, 170, 226);
          }
 
          #formSearch td
@@ -61,7 +62,7 @@
    </head>
    <body>
       <header>
-         <p>Новосибирский книжный каталог</p>
+         <p><a href="main.html"><img src="book.png" width="70px"></a>Новосибирский книжный каталог</p>
       </header>
       <!--Шапка сайта-->
    <table>
@@ -71,7 +72,7 @@
          <td id="userMenu">
             <p>Личный кабинет</p>
             <ul>
-               <li><a href="resrvation.html">Список бронирвоаний</a></li>
+               <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
                <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
                <li title=""><a href="">Получить список пользователей</a></li>
             </ul>
@@ -89,7 +90,7 @@
             <table id="formSearch">
                <tr title="Укажите одного или более авторов, слова на русском языке">
                   <td class="column1">Автор:</td>
-                  <td class="column2"><input type="text" id="authorBook" pattern="^^[А-Яа-яЁё\.\s]+$"></td>
+                  <td class="column2"><input type="text" id="authorBook" pattern="^^[А-Яа-яЁё\.\s]+$" autofocus></td>
                </tr>
                <tr>
                   <td class="column1">Название:</td>

@@ -1,70 +1,83 @@
 <!DOCTYPE html>
-<head>
-   <meta charset="UTF-8">
-   <title>Список бронирований</title>
-   <link rel="stylesheet" href="style.css">
-   <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
-   <style>
-      #header
-      {
-         margin-left: 40%;
-      }
-      table
-      {
-         border-collapse: collapse;
-      }
-      td
-      {
-         border: 1px solid black;
-      }
-   </style>
-</head>
-<body>
-   <header>
-      <p>Новосибирский книжный каталог</p>
-   </header>
-   <!--Шапка сайта-->
-   <table>
-      <tr>
-         <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
-         </td>
-         <td id="userMenu">
-            <p>Личный кабинет</p>
-            <ul>
-               <li><a href="resrvation.html">Список бронирвоаний</a></li>
-               <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
-               <li title=""><a href="">Получить список пользователей</a></li>
-            </ul>
-            </div>
-         </td>
-         <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
-         <td id="col4">
-   
-         </td>
-      </tr>
-   </table>
-   
-   <p id="header">Список бронирований</p>
-   <p>Имя пользователя</p>
-   <table>
-      <tr>
-         <td>Автор</td>
-         <td>Название</td>
-         <td>Количество</td>
-         <td>Срок возврата</td>
-      </tr>
-      <tr>
-         <td></td>
-         <td></td>
-         <td></td>
-         <td></td>
-      </tr>
-      <tr>
-         <td></td>
-         <td></td>
-         <td></td>
-         <td></td>
-      </tr>
-   </table>
-</body>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Список бронирований</title>
+      <link rel="stylesheet" href="style.css">
+      <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+      <style>
+         p
+         {
+            margin-left: 5%;
+         }
+         #information
+         {
+            margin-left: 5%;
+            width: 80%;
+         }
+         .column2
+         {
+            width: 45%;
+         }
+         .column3, .column4
+         {
+            width: 20%;
+         }
+         .column5
+         {
+            width: 10%;
+         }
+      </style>
+   </head>
+   <body>
+      <header>
+         <p><a href="main.html"><img src="book.png" width="70px"></a>Новосибирский книжный каталог</p>
+      </header>
+      <!--Шапка сайта-->
+      <table>
+         <tr>
+            <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+            </td>
+            <td id="userMenu">
+               <p>Личный кабинет</p>
+               <ul>
+                  <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
+                  <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
+                  <li title=""><a href="">Получить список пользователей</a></li>
+               </ul>
+               </div>
+            </td>
+            <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
+            <td id="col4">
+      
+            </td>
+         </tr>
+      </table>
+      
+      <p>Имя пользователя</p>
+      <table id="information">
+         <tr>
+            <td class="column1">№</td>
+            <td class="column2">Заглавие</td>
+            <td class="column3">Дата выдачи</td>
+            <td class="column4">Срок возврата</td>
+            <td class="column5">Количество</td>
+         </tr>
+         <tr>
+            <td class="column1"></td>
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+         </tr>
+         <tr>
+            <td class="column1"></td>
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+         </tr>
+      </table>
+   </body>
 </html>
