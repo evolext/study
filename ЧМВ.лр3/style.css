@@ -58,16 +58,16 @@ td
 }
 #col1
 {
-   width: 15%;
+   width: 20%;
 }
 #userMenu
 {
-   width: 15%;
+   width: 20%;
    position: relative;
 }
 #col3
 {
-   width: 15%;
+   width: 20%;
 }
 td ul
 {
@@ -100,4 +100,9 @@ td ul li a:hover
 #information td, #addingBook td, #formSearch td, #registration table td
 {
    background-color: white;
+}
+#siteHead, #siteHead a
+{
+   font-size: 1.15em;
+   color: white;
 }

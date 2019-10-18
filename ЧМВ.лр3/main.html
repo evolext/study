@@ -55,6 +55,7 @@
             width: 20%;
             overflow: hidden;
             float: left;
+            display: none;
          }
          #results
          {
@@ -75,6 +76,7 @@
 
          #noticeTitle, #authorizationTitle
          {
+            color: white;
             text-align: center;
             margin: 0;
             background-color: rgb(39, 170, 226);
@@ -83,6 +85,17 @@
          #search
          {
             margin-left: 0;
+         }
+         #searchPlace
+         {
+            margin: 5px;
+            height: 20px;
+            width: 20%;
+         }
+         #search button
+         {
+            height: 28px;
+            width: 80px;
          }
 
          #registration
@@ -124,8 +137,6 @@
             border: none;
          }
 
-
-
          #blackout
          {
             background-color: rgba(1, 1, 1, 0.75);
@@ -141,12 +152,14 @@
 
 
 
+
       </style>
    </head>
    <body>
       <header>
          <p><a href="main.html"><img src="book.png" width="70px"></a>Новосибирский книжный каталог</p>
       </header>
+
       <!--Шапка сайта-->
       <table id="siteHead">
          <tr>
@@ -156,7 +169,6 @@
                   <ul> 
                      <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
                      <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
-                     <li id="getUsersList"><a href="">Получить список пользователей</a></li>
                   </ul>
                </div>
             </td>
@@ -172,87 +184,83 @@
                   <input type="text" placeholder="Поиск" id="searchPlace" pattern="^[А-Яа-яЁё\s]+$" required
                      title="Вводите слова на русском без знаков препинания" autofocus>
                   <button type="submit" title="Начать поиск">Поиск</button>
-                  <a href="advanced_search.html">Расширенный поиск</a>
                </form>
             </td>
          </tr>
       </table>
 
       
+      
+      <!--Форма для авторизации-->
+      <form id="authorization"> 
+         <p id="authorizationTitle">Вход в систему</p>
+         <p><span>Логин:</span> <input type="text"></p>
+         <p><span>Пароль:</span> <input type="password"></p>
+         <p><button id="toComeIn">Войти</button> <input id="join" type="button" onclick="show('block')" value="Зарегистрироваться"></p>
+      </form>
 
+      <script>
+         function validate()
+         {
+            var searchPlace = document.getElementById("searchPlace");
 
-
-            
-            <!--Форма для авторизации-->
-            <form id="authorization"> 
-                  <p id="authorizationTitle">Вход в систему</p>
-                  <p><span>Логин:</span> <input type="text"></p>
-                  <p><span>Пароль:</span> <input type="password"></p>
-                  <p><button id="toComeIn">Войти</button> <input id="join" type="button" onclick="show('block')" value="Зарегистрироваться"></p>
-            </form>
-
-            <script>
-            function validate()
+            if (!searchPlace.value)
             {
-               var searchPlace = document.getElementById("searchPlace");
-
-               if (!searchPlace.value)
-               {
-                  alert("Ошибка: поле для поиска не заполнено!");
-                  searchPlace.style.backgroundColor = red;
-                  return false;
-               }
+               alert("Ошибка: поле для поиска не заполнено!");
+               searchPlace.style.backgroundColor = red;
+               return false;
             }
-            </script>
+         }
+      </script>
 
          
 
 
-            
-            
-            <!--Уведомления-->
-            <div id="notice">
-               <p id="noticeTitle">Уведомления</p>
-               <p>Уведомление 1</p>
-               <p>Уведомление 2</p>
-               <p>Уведомление 3</p>
-            </div>
-
-            <!--Результаты поиска-->
-            <div id="results">
-               Тут результаты поиска
-            </div>
+         
+      <!--Уведомления-->
+      <div id="notice">
+         <p id="noticeTitle">Уведомления</p>
+         <p>Уведомление 1</p>
+         <p>Уведомление 2</p>
+         <p>Уведомление 3</p>
+      </div>
 
 
-            <!--Затемнение-->
-            <div id="blackout">
 
-            </div>
+      <!--Результаты поиска-->
+      <div id="results">
+         Тут результаты поиска
+      </div>
 
 
-            <!--Регистарция-->
-               <form id="registration">
-                  <img src="cross.png" alt="закрыть" width="20px" id="closeCross" onclick="show('none')">
-                  <p>Информация для регистрации</p>
-                  <table>
-                     <tr>
-                        <td><input data-rule="data" type="text" placeholder="Фамилия" id="surname"></td>
-                     </tr>
-                     <tr>
-                        <td><input data-rule="data" type="text" placeholder="Имя" id="name"></td>
-                     </tr>
-                     <tr>
-                        <td><input data-rule="email" type="text" placeholder="Электронная почта" id="email"></td>
-                     </tr>
-                     <tr>
-                        <td><input type="password" placeholder="Пароль" id="pass"></td>
-                     </tr>
-                     <tr>
-                        <td><button>Регистарция</button></td>
-                     </tr>
-                  </table>
-               </form>
+      <!--Затемнение-->
+      <div id="blackout"></div>
+
+
+      <!--Регистарция-->
+      <form id="registration" onsubmit="return validation();">
+         <img src="cross.png" alt="закрыть" width="20px" id="closeCross" onclick="show('none')">
+         <p>Информация для регистрации</p>
+         <table>
+            <tr>
+               <td><input data-rule="data" type="text" placeholder="Фамилия" id="surname" title="Укажите свою фамилию"></td>
+            </tr>
+            <tr>
+               <td><input data-rule="data" type="text" placeholder="Имя" id="name" title="Укажите своё имя"></td>
+            </tr>
+            <tr>
+               <td><input data-rule="email" type="text" placeholder="Электронная почта" id="email" title="Укажите адрес своей электронной почты"></td>
+            </tr>
+            <tr>
+               <td><input type="password" placeholder="Пароль" id="pass"></td>
+            </tr>
+            <tr>
+               <td><button>Регистарция</button></td>
+            </tr>
+         </table>
+      </form>
                
+
                <script>
                   let inputs = document.querySelectorAll('input[data-rule]');
 
@@ -293,7 +301,23 @@
 
                </script>
 
+         
+         <script>
+            // Функция валидации
+            function validation() 
+            {
+               var surname = document.getElementById("surname");
+               var name = document.getElementById("name");
+               var email = document.getElementById("email");
+               var pass = document.getElementById("pass");
 
+               if (!surname.value || !name.value || !email.value || !pass.value)
+               {
+                  alert("Ошибка! Все поля регистрации являются обязательными для заполнения")
+                  return false;
+               }
+            }
+         </script>
 
 
          <script>
