@@ -10,10 +10,6 @@
          {
             border: 3px solid green;
          }
-         .invalid
-         {
-            border: 3px solid red;
-         }
          .undef
          {
             border: 3px solid grey;
@@ -104,7 +100,7 @@
             display: none;
 
             width: 30%;
-            height: 45%;
+            height: 50%;
             position: absolute;
             left: 35%;
             top: 30%;
@@ -128,8 +124,13 @@
          #registration input
          {
             width: 70%;
-            margin: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
             height: 100%;
+            position: relative;
+            z-index: 170;
          }
          #registration table td
          {
@@ -150,10 +151,44 @@
             display: none;
          }
 
+         .warnings
+         {
+            color: white;
+            background-color: rgb(224, 45, 45);
+            display: inline-block;
+            height: 40px;
+            width: 316px;
+            position: absolute;
+            margin-left: -320px;
+            margin-top: 1px;
+            font-size: 11px;
+            padding: 0;
+            z-index: 160;
+         }
+         #warning1, #warning2, #warning3, #warning4
+         {
+            display: none;
+         }
+
 
 
 
       </style>
+
+
+
+      <script>
+         // Функция показа
+         function show(state) {
+            document.getElementById("registration").style.display = state;
+            document.getElementById("blackout").style.display = state;
+            document.getElementById("userSurname").focus();
+         }
+      </script>
+
+      
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
    </head>
    <body>
       <header>
@@ -167,7 +202,7 @@
             <td id="userMenu">
                <p>Личный кабинет</p>
                   <ul> 
-                     <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
+                     <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирований</a></li>
                      <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
                   </ul>
                </div>
@@ -180,9 +215,9 @@
          <tr id="secondRaw">
             <!--Поисковик-->
             <td colspan="4">
-               <form id="search" onsubmit="return validate();">
-                  <input type="text" placeholder="Поиск" id="searchPlace" pattern="^[А-Яа-яЁё\s]+$" required
-                     title="Вводите слова на русском без знаков препинания" autofocus>
+               <form id="search">
+                  <input type="text" placeholder="Поиск" id="searchPlace" required
+                     autofocus>
                   <button type="submit" title="Начать поиск">Поиск</button>
                </form>
             </td>
@@ -194,24 +229,12 @@
       <!--Форма для авторизации-->
       <form id="authorization"> 
          <p id="authorizationTitle">Вход в систему</p>
-         <p><span>Логин:</span> <input type="text"></p>
-         <p><span>Пароль:</span> <input type="password"></p>
-         <p><button id="toComeIn">Войти</button> <input id="join" type="button" onclick="show('block')" value="Зарегистрироваться"></p>
+         <p title="укажите свой логин"><span>Логин:</span> <input type="text"></p>
+         <p title="укажите пароль от профиля"><span>Пароль:</span> <input type="password"></p>
+         <p><button id="toComeIn">Войти</button> <input id="join" type="button" onclick="show('block')" value="Зарегистрироваться" title="пройти регистрацию"></p>
       </form>
 
-      <script>
-         function validate()
-         {
-            var searchPlace = document.getElementById("searchPlace");
 
-            if (!searchPlace.value)
-            {
-               alert("Ошибка: поле для поиска не заполнено!");
-               searchPlace.style.backgroundColor = red;
-               return false;
-            }
-         }
-      </script>
 
          
 
@@ -238,97 +261,121 @@
 
 
       <!--Регистарция-->
-      <form id="registration" onsubmit="return validation();">
-         <img src="cross.png" alt="закрыть" width="20px" id="closeCross" onclick="show('none')">
+      <form id="registration" class="form js-validate">
+         <img src="cross.png" title="закрыть" alt="закрыть" width="20px" id="closeCross" onclick="show('none')">
          <p>Информация для регистрации</p>
          <table>
             <tr>
-               <td><input data-rule="data" type="text" placeholder="Фамилия" id="surname" title="Укажите свою фамилию"></td>
+               <td><input data-rule="data" type="text" placeholder="Фамилия" id="userSurname" class="undef"><span class="warnings" id="warning1">Неверный формат: вводите только буквы</span></td>
             </tr>
             <tr>
-               <td><input data-rule="data" type="text" placeholder="Имя" id="name" title="Укажите своё имя"></td>
+               <td><input data-rule="data" type="text" placeholder="Имя" id="userName" class="undef"><span class="warnings" id="warning2">Неверный формат: вводите только буквы</span></td>
             </tr>
             <tr>
-               <td><input data-rule="email" type="text" placeholder="Электронная почта" id="email" title="Укажите адрес своей электронной почты"></td>
+               <td><input data-rule="email" type="text" placeholder="Электронная почта" id="userMail" class="undef" ><span class="warnings" id="warning3">Неверный формат: вводите адрес электронной почты</span></td>
             </tr>
             <tr>
-               <td><input type="password" placeholder="Пароль" id="pass"></td>
+               <td><input data-rule="pass" type="password" placeholder="Пароль" id="userPass" class="undef"><span class="warnings" id="warning4">Поле обязательно для заполнения</span></td>
             </tr>
             <tr>
-               <td><button>Регистарция</button></td>
+               <td><button id="regButton" title="Подтвердить регистрацию" disabled>Регистарция</button></td>
             </tr>
          </table>
       </form>
                
 
-               <script>
-                  let inputs = document.querySelectorAll('input[data-rule]');
-
-                  for (let input of inputs) {
-                     input.addEventListener('blur', function () {
-                        let rule = this.dataset.rule;
-                        let value = this.value;
-                        let check;
-
-                        if (value == "")
-                           this.classList.add('undef');
-                        else
-                        {
-                           switch (rule) {
-                              case "data":
-                                 check = /^[А-Яа-яЁё]/.test(value);
-                                 break;
-                              case "email":
-                                 check = /^[A-Za-z\@\.]/.test(value);
-                                 break;
-                              default:
-                                 break;
-                           }
-                              
-                           this.classList.remove('undef');
-                           this.classList.remove('invalid');
-                           this.classList.remove('valid');
-
-                           if (check)
-                              this.classList.add('valid');
-                           else
-                              this.classList.add('invalid');
-                        }
-                     
-                     });
-                  }
 
 
-               </script>
-
+   <script>
+       // перебираем все поля формы регистрации
+      
+      let inputs = document.querySelectorAll('input[data-rule]');
          
-         <script>
-            // Функция валидации
-            function validation() 
-            {
-               var surname = document.getElementById("surname");
-               var name = document.getElementById("name");
-               var email = document.getElementById("email");
-               var pass = document.getElementById("pass");
+      for (let input of inputs) {
+            input.addEventListener('blur', function () {
+               let rule = this.dataset.rule;
+               let value = this.value; // содержимое инпута
+               let check;
 
-               if (!surname.value || !name.value || !email.value || !pass.value)
+               var dataPattern = new RegExp("[A-Za-zА-Яа-яёЁ]+$");
+               var reg = /^([a-za-z0-9_\-\.])+\@([a-za-z0-9_\-\.])+\.([a-za-z]{2,4})$/;
+
+               switch(rule) // обработка зависит от типа инпута
                {
-                  alert("Ошибка! Все поля регистрации являются обязательными для заполнения")
-                  return false;
+                  case "data": 
+                     check = dataPattern.test(value);
+                     break;
+                  case "email":
+                     check = reg.test(value);
+                     break;
+                  case "pass":
+                     check = (value != "");
+                     break;
                }
-            }
-         </script>
+               
+               this.classList.remove("valid");
 
 
-         <script>
-            // Функция показа
-            function show(state) 
-            {
-               document.getElementById("registration").style.display = state;
-               document.getElementById("blackout").style.display = state;
-               document.getElementById("surname").focus();
-            }
-         </script>
+               var thisId = this.id;
+               if(check)
+               {
+                  this.className = "valid";
+                  switch(thisId)
+                  {
+                     case "userSurname":
+                        document.getElementById("warning1").style.display = "none";
+                        break;
+                     case "userName":
+                        document.getElementById("warning2").style.display = "none";
+                        break;
+                     case "userMail":
+                        document.getElementById("warning3").style.display = "none";
+                        break;
+                     case "userPass":
+                        document.getElementById("warning4").style.display = "none";
+                        break;
+                  }
+               }
+               else
+               {
+                  this.classList.remove("undef");
+                  switch (thisId) {
+                     case "userSurname":
+                        document.getElementById("warning1").style.display = "inline-block";
+                        break;
+                     case "userName":
+                        document.getElementById("warning2").style.display = "inline-block";
+                        break;
+                     case "userMail":
+                        document.getElementById("warning3").style.display = "inline-block";
+                        break;
+                     case "userPass":
+                        document.getElementById("warning4").style.display = "inline-block";
+                        break;
+                  }
+               }
+               checkForms();
+
+            });
+         }
+
+         function checkForms()
+         {
+            var surname = $('#userSurname');
+            var name = $('#userName');
+            var mail = $('#userMail');
+            var pass = $('#userPass');
+
+            if (surname.attr('class') == "valid" && name.attr('class') == "valid" && mail.attr('class') == "valid" && pass.attr('class') == "valid")
+               $('#regButton').removeAttr('disabled');
+            else
+               $('#regButton').attr('disabled', 'disabled');
+         }
+   </script>
+      
+
+
+
 
    </body>
 </html>

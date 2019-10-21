@@ -17,6 +17,12 @@
             display: inline-block;
             border: 1px solid black;
          }
+         #search input
+         {
+            position: relative;
+            z-index: 100;
+            margin-top: 10px;
+         }
 
          form
          {
@@ -26,6 +32,7 @@
          }
          #searchTitle
          {
+            color: white;
             margin: 0;
             text-align: center;
             background-color: rgb(39, 170, 226);
@@ -58,31 +65,56 @@
             margin-top: 20px;
          }
 
+         #warning
+         {
+            background-color: red;
+            color: white;
+            display: none;
+            height: 37px;
+            width: 226px;
+            position: absolute;
+            z-index: 10;
+            margin-left: -220px;
+            margin-top: -2px;
+            font-size: 10px;
+            padding: 0;
+         }
+         #siteHead
+         {
+            position: relative;
+            z-index: 200;
+         }
+
+
+
+
       </style>
+      <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+      <script src="jquery.maskedinput.min.js"></script>
    </head>
    <body>
       <header>
          <p><a href="main.html"><img src="book.png" width="70px"></a>Новосибирский книжный каталог</p>
       </header>
       <!--Шапка сайта-->
-   <table>
-      <tr>
-         <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
-         </td>
-         <td id="userMenu">
-            <p>Личный кабинет</p>
-            <ul>
-               <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирвоаний</a></li>
-               <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
-               <li title=""><a href="">Получить список пользователей</a></li>
-            </ul>
-            </div>
-         </td>
-         <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
-         <td id="col4">
-         </td>
-      </tr>
-   </table>
+      <table id="siteHead">
+         <tr>
+            <td id="col1" title="Перейти на главную страницу"><a href="main.html">Главная</a></li>
+            </td>
+            <td id="userMenu">
+               <p>Личный кабинет</p>
+               <ul>
+                  <li title="Посмотреть список забронированных книг"><a href="resrvation.html">Список бронирований</a></li>
+                  <li title="Добавить новую книгу в каталог"><a href="adding_book.html">Добавление новой книги</a></li>
+               </ul>
+               </div>
+            </td>
+            <td id="col3" title="Поиск по нескольким полям"><a href="advanced_search.html">Расширенный поиск</a></td>
+            <td id="col4">
+         
+            </td>
+         </tr>
+      </table>
       <!--Форма для поиска-->
       <form id="search" onsubmit="return validate();">
             <p id="searchTitle" >Расширенный поиск</p>
@@ -90,53 +122,89 @@
             <table id="formSearch">
                <tr title="Укажите одного или более авторов, слова на русском языке">
                   <td class="column1">Автор:</td>
-                  <td class="column2"><input type="text" id="authorBook" pattern="^^[А-Яа-яЁё\.\s]+$" autofocus></td>
+                  <td class="column2"><input type="text" id="authorBook" autofocus onkeyup="checkForm()"><span id="warning">Вводите только фамилии, имена и инициалы</span></td>
                </tr>
-               <tr>
+               <tr title="В этом поле укажите заглавие книги">
                   <td class="column1">Название:</td>
-                  <td class="column2"><input type="text" id="titleBook" pattern="^[А-Яа-яЁё\.\s]+$"></td>
+                  <td class="column2"><input type="text" id="titleBook" onkeyup="validate()"></td>
                </tr>
                <tr title="Укажите год публикации, вводить только цифры">
                   <td class="column1">Год публикации: </td>
-                  <td class="column2"><input type="text" id="yearBook" pattern="[0-9]{4}"></td>
+                  <td class="column2"><input type="text" id="yearBook" onkeyup="validate()"></td>
                </tr>
                <tr title="ISBN - уникальный номер книги, обычно указывается рядом со штрих-кодом, вводить только цифры">
                   <td class="column1">Номер ISBN:</td>
-                  <td class="column2"><input type="text" id="isbnBook" pattern="^[ 0-9]+$"></td>
-               </tr>
-               <tr title="Укажите любую информацию по книге, вводить слова на русском языке">
-                  <td class="column1">"Все поля":</td>
-                  <td class="column2"><input type="text" id="allFields" pattern="^[А-Яа-яЁё]+$"></td>
+                  <td class="column2"><input type="text" id="isbnBook" onkeyup="validate()"></td>
                </tr>
                <tr>
-                  <td colspan="2" id="serchStart"><button title="Начать поиск">Поиск</button></td>
+                  <td colspan="2" id="serchStart"><button title="Начать поиск" id="searchButton" disabled>Поиск</button></td>
                </tr>
             </table>
       </form>
-
-      <!--Функция валидации формы-->
-      <script>
-         function validate() 
-         {
-            var authorBook = document.getElementById("authorBook");
-            var titleBook = document.getElementById("titleBook");
-            var yearBook = document.getElementById("yearBook");
-            var isbnBook = document.getElementById("isbnBook");
-            var allFields = document.getElementById("allFields");
-            // Должно быть заполнено хотя бы одно из полей
-            if (!authorBook.value && !titleBook.value && !yearBook.value && !isbnBook.value && !allFields.value)
-            {
-               alert("Ошибка: заполните хотя бы одно поле для поиска!");
-               return false;
-            }
-
-         }
-      </script>
-
-
+      
       <div id="results">
          Результаты поиска
       </div>
+
+
+      <script>
+         $(function(){
+            $('#isbnBook').mask("999-9-99-999999-9");
+            $('#yearBook').mask("9999");
+         });
+
+         function checkForm()
+         {
+            var value = $('#authorBook').val();
+            var pattern = new RegExp("^[А-Яа-яЁё\. ]+$");
+            var check = pattern.test(value);
+
+            if (value == "")
+               check = true;
+
+
+            if (check)
+               $('#warning').css('display', 'none');
+            else
+               $('#warning').css('display', 'inline-block');
+
+
+            validate();
+         }
+
+         function validate()
+         {
+            var warn = $('#warning');
+            var author = $('#authorBook');
+            var title = $('#titleBook');
+            var year = $('#yearBook');
+            var isbn = $('#isbnBook');
+            
+
+            var h = year.val();
+            h = parseInt(h);
+            var x = h.toString();
+
+            var j = isbn.val();
+            j = parseInt(j);
+            var y = j.toString();
+
+
+
+            if ((warn.css('display') != "none") || (author.val() == "" && title.val() == "" && x.length < 4 && y.length < 13))
+               $('#searchButton').attr('disabled', 'disabled');
+            else
+               $('#searchButton').removeAttr('disabled');
+         }
+
+
+
+
+
+      </script>
+      
+
+
 
    </body>
 </html>
