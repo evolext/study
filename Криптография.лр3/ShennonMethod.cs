@@ -153,7 +153,7 @@ namespace encryption
         //                  5. граница Хэмминга и из неё значения r, k
         //                  6. Проверка границы Плоткина
         //                  7. Проверка границы Варшамова-Гильберта
-        public static void Сode_specifications(List L)
+        public static void СodeSpecifications(List L)
         {
             // 1. Находим все расстояния Хэмминга
             var i = 1;

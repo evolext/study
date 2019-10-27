@@ -39,39 +39,41 @@ namespace encryption
 
             // Кодирование кода Хэмминга
             string path = @"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Alphabet.txt";
-            //int N = 4;
+            int N = 4;
 
-            //// Создаем список с буквами и кодами
-            //List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(path, N);
-
-            //// Ввод матрицы G
-            //var G = new hamming_code.Matrix(4, 7);
-            //G.Input();
-
-            //// Находим преобразованные коды
-            //hamming_code.HammingCoding.GetCodes(Alphabet, G);
-
-            //// Кодируем сообщение
-
-            //hamming_code.HammingCoding.Coding(Alphabet);
-
-
-            // Декодирование кода Хэмминга
+            // Создаем список с буквами и кодами
+            List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(path, N);
 
             // Ввод матрицы G
             var G = new hamming_code.Matrix(4, 7);
             G.Input();
-            // Получение матрицы H
-            var H = hamming_code.HammingDecoding.GetMatrixH(G);
 
-            // Считываем текст
-            string input_buf = hamming_code.HammingDecoding.InputText();
-
-
-            List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(path, 4);
+            // Находим преобразованные коды
             hamming_code.HammingCoding.GetCodes(Alphabet, G);
 
-            hamming_code.HammingDecoding.DecodingProcedure(Alphabet, input_buf, H);
+            // Кодируем сообщение
+
+            hamming_code.HammingCoding.Coding(Alphabet);
+
+            // Характеристики кода
+            hamming_code.HammingCoding.Specifications(Alphabet);
+
+            // Декодирование кода Хэмминга
+
+            // Ввод матрицы G
+            //var G = new hamming_code.Matrix(4, 7);
+            //G.Input();
+            //// Получение матрицы H
+            //var H = hamming_code.HammingDecoding.GetMatrixH(G);
+
+            //// Считываем текст
+            //string input_buf = hamming_code.HammingDecoding.InputText();
+
+
+            //List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(path, 4);
+            //hamming_code.HammingCoding.GetCodes(Alphabet, G);
+
+            //hamming_code.HammingDecoding.DecodingProcedure(Alphabet, input_buf, H);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace hamming_code
     }
 
 
-    class HammingCoding
+    class HammingCoding: encryption.SpecialMath
     {
         // Инициализация алфавита
         // path - путь до файла с алфавитом
@@ -172,6 +172,78 @@ namespace hamming_code
             for (int i = 0; i < arr_size; i++)
                 new_arr[i] = arr[i];
             return new_arr;
+        }
+
+
+        // Посчитать характеристики кода
+        // Характеристики: 
+        //                  1. все расстояния Хэмминга
+        //                  2. расстояние d0
+        //                  3. Кратность обнаружения
+        //                  4. Кратность исправления
+        //                  5. граница Хэмминга и из неё значения r, k
+        //                  6. Проверка границы Плоткина
+        //                  7. Проверка границы Варшамова-Гильберта
+        public static void Specifications(List<Node> Alphabet)
+        {
+            // 1. Находим все расстояния Хэмминга
+            int help;
+            int d_min = Alphabet[0].Code.Length;
+            int code_length = Alphabet[0].Code.Length;
+
+            for (int i = 0; i < Alphabet.Count; i++)
+            {
+                for (int j = i + 1; j < Alphabet.Count; j++)
+                {
+                    help = 0;
+                    // Ищем кодовое расстояние
+                    for (int p = 0; p < Alphabet[i].Code.Length; p++)
+                    {
+                        if (Alphabet[i].Code[p] != Alphabet[j].Code[p])
+                            help++;
+                    }
+                    if (help < d_min)
+                        d_min = help;
+                    Console.WriteLine("d = {0} для {1} и {2} кода", help, i + 1, j + 1);
+                }
+                Console.WriteLine();
+            }
+
+            // 2. d0 уже найденна к концу циклов
+            Console.WriteLine("d0 = {0}", d_min);
+
+            // 3. Кратность обнаружения
+            int q_detection = d_min - 1;
+            Console.WriteLine("qобн = {0}", q_detection);
+
+            // 4. Кратность исправления
+            int q_correction = 0;
+            if ((d_min & 1) == 0) // четное
+                q_correction = d_min / 2 - 1;
+            else
+                q_correction = (d_min - 1) / 2;
+            Console.WriteLine("qисп = {0}", q_correction);
+
+
+            // 5. граница Хэмминга, k и r
+            int help1 = 0;
+            for (int i = 0; i <= q_correction; i++)
+                help1 += Cominations(code_length, i);
+            double help2 = Math.Log(help1, 2);
+            Console.WriteLine("Граница Хэминга r >= {0}", help2);
+            int r = (int)Math.Ceiling(help2);
+            int k = code_length - r;
+            Console.WriteLine("r = {0}, k = {1}", r, k);
+
+            // 6. Граница Плоткина
+            double help3 = (r + k) * Math.Pow(2, k - 1) / (Math.Pow(2, k) - 1);
+            Console.WriteLine("Граница Плоткина d0 <= {0}", help3);
+
+            // 7. Граница Варшамова-Гильберта
+            double help4 = 0;
+            for (int i = 0; i <= d_min - 2; i++)
+                help4 += Cominations(r + k, i);
+            Console.WriteLine("{0} >= {1}", Math.Pow(2, r), help4);
         }
     }
 
@@ -320,6 +392,17 @@ namespace hamming_code
                 arr[index] = 1;
             else
                 arr[index] = 0;
+
+            
+            // Проверяем на двухкратную ошибку
+            for (int i = 0; i < H.N; i++)
+            {
+                sum = 0;
+                for (int j = 0; j < H.M; j++)
+                    sum += H.Elem[i][j] * arr[j];
+                // Сумма по модулю 2
+                res[i] = sum % 2;
+            }
 
             Console.WriteLine("Исправлена ошибка в {0} слове в {1} позиции", count, index + 1);
 
