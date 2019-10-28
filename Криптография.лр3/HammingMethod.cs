@@ -8,26 +8,23 @@ using System.IO;
 namespace hamming_code
 {
     // Класс, реализующий элемент списка с кодами символов
+    // Содержит два поля - символ и его представление в закодированном виде
     class Node
     {
         // Символ исходный
         public string Symbol { get; set; }
-        // Его шифр
+        // Код символа
         public int[] Code { get; set; }
-        public Node Prev { get; set; }
-        public Node Next { get; set; }
 
         // Конструктор
         public Node(string symb, int[] code)
         {
             this.Symbol = symb;
             this.Code = code;
-            this.Prev = null;
-            this.Next = null;
         }
     }
 
-    // Класс матрицы
+    // Класс матрицы, нужен для хранения матриыц H и G
     class Matrix
     {
         // Количество строк матрицы
@@ -61,21 +58,21 @@ namespace hamming_code
         }
     }
 
-
+    // Класс, реализующий кодирование кодом Хэмминга
     class HammingCoding: encryption.SpecialMath
     {
         // Инициализация алфавита
-        // path - путь до файла с алфавитом
         // size - длина одного слова в символах
-        public static List<Node> InputAlphabet(string PATH, int size)
+        public static List<Node> InputAlphabet(int size)
         {
-            List<Node> L = new List<Node>();
+            List<Node> L = new List<Node>(); // Список для хранения введенного алфавита
+            // Вспомогательные переменные
             string readline = System.String.Empty;
             string readSymbol = System.String.Empty;
             int[] readCode = new int[size];
 
 
-            using (var Sr = new StreamReader(PATH))
+            using (var Sr = new StreamReader(@"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Alphabet.txt"))
             {
                 int i;
                 while ((readline = Sr.ReadLine()) != null)
@@ -91,7 +88,6 @@ namespace hamming_code
 
                     // Очищаем буфер
                     readSymbol = System.String.Empty;
-                    
                 }
             }
             return L;
@@ -109,7 +105,8 @@ namespace hamming_code
                 // Первые N символов оставляем без изменения
                 for (int j = 0; j < G.N; j++)
                     help[j] = L[i].Code[j];
-                // 
+                // Остальные получаем при помощи ссуммирования по модулю 2
+                // со второй частью матрицы G
                 for (int j = G.N; j < G.M; j++)
                 {
                     for (int k = 0; k < G.N; k++)
@@ -123,58 +120,32 @@ namespace hamming_code
             }
         }
 
-        // Само кодирвоание
+        // Процедура кодирования
         public static void Coding(List<Node> Alphabet)
         {
             string input_buf = System.String.Empty; // Входной текст
             string output_buf = System.String.Empty; // Закодированное сообщение
             string help = System.String.Empty;
 
+            // Считывание исходного ссобщения с файла
             using (var Sr = new StreamReader(@"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Input.txt"))
             {
                 input_buf = Sr.ReadLine();
             }
-
-            // Анализируем входное сообщение
+            // Разбиваем исходное сообщение на слова, заменяем их соответствующие коды + разделитель
             for (int i = 0; i < input_buf.Length; i++)
             {
                 if ((help = FindCodeOfSymbol(Alphabet, input_buf[i].ToString())) != System.String.Empty)
                     output_buf += help + ":";
             }
-
+            // Запись закодированного сообщения в файл
             using (var Sw = new StreamWriter(@"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Output.txt"))
             {
                 Sw.WriteLine(output_buf);
             }
         }
 
-        // Поиск кода заданного символа
-        public static string FindCodeOfSymbol(List<Node> L, string symbol)
-        {
-            string result = System.String.Empty;
-
-            for (int i = 0; i < L.Count; i++)
-            {
-                if (L[i].Symbol == symbol)
-                {
-                    for (int k = 0; k < L[i].Code.Length; k++)
-                        result += L[i].Code[k].ToString();
-                    return result;
-                }
-            }
-            return System.String.Empty;
-        }
-
-        // Создание копии массива
-        public static int[] ArrCopy(int[] arr, int arr_size)
-        {
-            int[] new_arr = new int[arr_size];
-            for (int i = 0; i < arr_size; i++)
-                new_arr[i] = arr[i];
-            return new_arr;
-        }
-
-
+        
         // Посчитать характеристики кода
         // Характеристики: 
         //                  1. все расстояния Хэмминга
@@ -202,6 +173,7 @@ namespace hamming_code
                         if (Alphabet[i].Code[p] != Alphabet[j].Code[p])
                             help++;
                     }
+                    // Сразу записываем минимальное 
                     if (help < d_min)
                         d_min = help;
                     Console.WriteLine("d = {0} для {1} и {2} кода", help, i + 1, j + 1);
@@ -220,7 +192,7 @@ namespace hamming_code
             int q_correction = 0;
             if ((d_min & 1) == 0) // четное
                 q_correction = d_min / 2 - 1;
-            else
+            else                  // нечетное
                 q_correction = (d_min - 1) / 2;
             Console.WriteLine("qисп = {0}", q_correction);
 
@@ -232,6 +204,7 @@ namespace hamming_code
             double help2 = Math.Log(help1, 2);
             Console.WriteLine("Граница Хэминга r >= {0}", help2);
             int r = (int)Math.Ceiling(help2);
+            // k определяем через n и r
             int k = code_length - r;
             Console.WriteLine("r = {0}, k = {1}", r, k);
 
@@ -245,11 +218,40 @@ namespace hamming_code
                 help4 += Cominations(r + k, i);
             Console.WriteLine("{0} >= {1}", Math.Pow(2, r), help4);
         }
+
+        // Поиск кода символа в списке по известному значению символа
+        public static string FindCodeOfSymbol(List<Node> L, string symbol)
+        {
+            string result = System.String.Empty;
+
+            // Прозод по списку
+            for (int i = 0; i < L.Count; i++)
+            {
+                if (L[i].Symbol == symbol)
+                {
+                    for (int k = 0; k < L[i].Code.Length; k++)
+                        result += L[i].Code[k].ToString();
+                    return result;
+                }
+            }
+            return System.String.Empty;
+        }
+
+        // Создание копии массива
+        public static int[] ArrCopy(int[] arr, int arr_size)
+        {
+            int[] new_arr = new int[arr_size];
+            for (int i = 0; i < arr_size; i++)
+                new_arr[i] = arr[i];
+            return new_arr;
+        }
     }
 
+
+    // Класс, реализуюшщий декодирование кода Хэмминга
     class HammingDecoding
     {
-        // Получить матрицу H, имея матрицу G
+        // Получить матрицу H, через матрицу G
         public static Matrix GetMatrixH(Matrix G)
         {
             // Определяем размер результирующей матрицы
@@ -261,7 +263,6 @@ namespace hamming_code
                 for (int j = 0; j < H.M; j++)
                     H.Elem[i][j] = 0;
             }
-
             // Заполняем сначала R
             for (int i = 0; i < G.N; i++)
             {
@@ -283,17 +284,20 @@ namespace hamming_code
             }
         }
 
-
         // Сама процедура декодирования
         public static void DecodingProcedure(List<Node> Alphabet, string message, Matrix H)
         {
+            // Вспомогательные переменные
             string help1 = System.String.Empty;
             int[] help2 = new int[H.M - H.N];
+            // Полченный символ после декодирования
             string symbol = System.String.Empty;
+            // Выходной буфер
             string output_buf = System.String.Empty;
-
-
+            // Счетчик слов, необходим для информирования
             int count = 0;
+
+            // Основной цикл
             for (int i = 0; i < message.Length; i++)
             {
                 if (message[i] != ':')
@@ -304,6 +308,7 @@ namespace hamming_code
                     // Обрабатываем код на ошибки и получаем исходный шифр
                     help2 = FindingAndfixingErrors(help1, H, count);
 
+                    // Если символ принадлежит алфавиту, то записываем в выходной буфер
                     if ((symbol = FindSymbolOfCode(Alphabet, help2)) != null)
                         output_buf += symbol;
                     else
@@ -317,21 +322,21 @@ namespace hamming_code
             {
                 Sw.WriteLine(output_buf);
             }
-
         }
 
         // Функция нахождения и возможной обработки ошибок
         public static int[] FindingAndfixingErrors(string code, Matrix H, int count)
         {
-            // Переводим считанное слово в вид массива
             int[] arr = new int[H.M];
             int[] result = new int[H.M - H.N];
-            for (int i = 0; i < arr.Length; i++)
-                arr[i] = code[i] - '0';
-
             // Вектор-результат умножения
             int[] res = new int[H.N];
+            // Индекс, для замены в коде
+            int index; 
 
+            // Переводим считанное слово в вид массива
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = code[i] - '0';
 
             // Умножаем кодовое слово на транспонированную матрицу H
             int sum; // Вспомогательная переменая
@@ -344,11 +349,10 @@ namespace hamming_code
                 res[i] = sum % 2;
             }
 
-            int index; // Индекс, для замены в коде
-
-            // Если ничего не надо исправлять
+            // Если ничего не надо исправлять, то код оставляем без изменения
             if (res[0] == 0 && res[1] == 0 && res[2] == 0)
             {
+                // Получаем исхоный код символа
                 for (int i = 0; i < result.Length; i++)
                     result[i] = arr[i];
                 return result;
@@ -386,27 +390,16 @@ namespace hamming_code
                 }     
             }            
 
-
             // Заменяем ошибочный бит
             if (arr[index] == 0)
                 arr[index] = 1;
             else
                 arr[index] = 0;
 
-            
-            // Проверяем на двухкратную ошибку
-            for (int i = 0; i < H.N; i++)
-            {
-                sum = 0;
-                for (int j = 0; j < H.M; j++)
-                    sum += H.Elem[i][j] * arr[j];
-                // Сумма по модулю 2
-                res[i] = sum % 2;
-            }
 
             Console.WriteLine("Исправлена ошибка в {0} слове в {1} позиции", count, index + 1);
 
-            // получаем исходный код символа
+            // Получаем исхоный код символа
             for (int i = 0; i < result.Length; i++)
                 result[i] = arr[i];
             return result;
@@ -416,7 +409,7 @@ namespace hamming_code
         public static string FindSymbolOfCode(List<Node> L, int[] code)
         {
             bool flag;
-
+            // Проход по списку
             for (int i = 0; i < L.Count; i++)
             {
                 flag = true;
@@ -425,14 +418,12 @@ namespace hamming_code
                     if (code[k] != L[i].Code[k])
                         flag = false;
                 }
-
                 if (flag)
                     return L[i].Symbol;
 
             }
-
+            // Если символ не найден
             return null;
         }
-
     }
 }

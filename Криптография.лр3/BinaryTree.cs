@@ -9,12 +9,12 @@ namespace encryption
     // Элемент бинарного дерева
     class Elem
     {
-        public int Key;
+        public int Key;     // Значение узлаЖ -1, 1, 0
         public Elem Left;   // Укзаатель на левого потомка
         public Elem Right;  // Указатель на правого потомка
         public Elem Parent; // Указатель на родителя
 
-        // конструктор класса
+        // Конструктор
         public Elem(int k)
         {
             this.Key = k;
@@ -23,22 +23,23 @@ namespace encryption
             this.Parent = null;
         }
     }
-    // Класс, реализующий бинарное дерево, нужное 
-    // для декодирования
+
+    // Класс, реализующий бинарное дерево,
+    // с помощью которого декодируется сообщение
     class BinaryTree
     {
         public Elem Root; // Корень дерева
+
         // Конструктор
         public BinaryTree()
         {
             Root = null;
         }
 
-        // Добавление нового элемента
+        // Вставка нового элемента в дерево
         public void Insert(string code)
         {
             int k = Convert.ToInt32(code[0]) - 48; // Получаем первый элемент
-
             Elem pointer = null;
 
             // Создаем элемент дерева для вставки перовго символа

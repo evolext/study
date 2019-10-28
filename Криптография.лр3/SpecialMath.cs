@@ -14,6 +14,7 @@ namespace encryption
             return Factorial(N) / (Factorial(M) * Factorial(N - M));
         }
 
+        // Вычисление факториала числа
         public static int Factorial(int num)
         {
             int n = 1;
@@ -25,10 +26,6 @@ namespace encryption
             }
             return result;
         }
-
-
-
-
 
         // Перевод дробного числа в двоичную СС
         public static string FloatToBin(double x)

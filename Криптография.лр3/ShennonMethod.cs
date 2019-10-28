@@ -7,12 +7,16 @@ using System.IO;
 
 namespace encryption
 {
+    // Реализация кодирования методом Шеннона с 
+    // добавление контрольного бита
     class ShennonCoding: SpecialMath
     {
         // Ввод данных
         public static string InputText(List L)
         {
+            // Вспомогательный буфер
             string lineRead = System.String.Empty;
+
             using (var Sr = new StreamReader(@"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Input.txt"))
             {
                 lineRead = Sr.ReadLine();
@@ -155,18 +159,19 @@ namespace encryption
         //                  7. Проверка границы Варшамова-Гильберта
         public static void СodeSpecifications(List L)
         {
-            // 1. Находим все расстояния Хэмминга
             var i = 1;
             var j = 0;
             int help;
             int d_min = L.Head.Code.Length;
 
+            // 1. Находим все расстояния Хэмминга
             for (var p = L.Head; p != null; p = p.Next, i++)
             {
                 j = i + 1;
                 for (var q = p.Next; q != null; q = q.Next, j++)
                 {
                     help = String_xor(p.Code, q.Code);
+                    // Сразу запоминаем минимальное d
                     if (help < d_min)
                         d_min = help;
                     Console.WriteLine("d = {0} для {1} и {2} кода", help, i, j);
@@ -211,7 +216,6 @@ namespace encryption
             Console.WriteLine("{0} >= {1}", Math.Pow(2, r), help4);
         }
 
-
         // Сложение по модулю два двух строк
         public static int String_xor(string str1, string str2)
         {
@@ -222,13 +226,11 @@ namespace encryption
                     help++;
             }
             return help;
-        }
-
-
-        
+        } 
     }
 
-
+    // Реализация декодирования текста, закодированного
+    // методом Шеннона сдобавлением проверочного бита в конце
     class ShennonDecoding
     {
         // Ввод закодированного сообщения
@@ -254,7 +256,7 @@ namespace encryption
             }
         }
 
-        // Выявление ошибочных символов
+        // Выявление ошибочных символов по проверочному биту
         public static void Error_detection(List L)
         {
             int help = 0;
@@ -279,7 +281,7 @@ namespace encryption
             }    
         }
 
-        // Обход прямой
+        // Прямой обход бинарного дерева
         public static void Traversal(Elem pointer, List L)
         {
             if (pointer != null)
@@ -315,6 +317,7 @@ namespace encryption
         {
             string help = System.String.Empty;
 
+            // Считываем входное сообщение
             using (var Sr = new StreamReader(@"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Prob.txt"))
             {
                 for (var p = L.Head; p != null; p = p.Next)
@@ -342,7 +345,8 @@ namespace encryption
                         if (p != null)
                             Sw.Write(p.Symbol);
                         else
-                            Console.WriteLine("Ошибка в " + count + " позиции");
+                            // Если обнаружена ошибка
+                            Console.WriteLine("Ошибка в " + count + " слове");
                         help = System.String.Empty;
                     }
                 }

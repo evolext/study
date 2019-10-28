@@ -38,11 +38,9 @@ namespace encryption
 
 
             // Кодирование кода Хэмминга
-            string path = @"C:\Users\evole\source\repos\Криптография.лр3(консольное)\Криптография.лр3(консольное)\Alphabet.txt";
-            int N = 4;
 
             // Создаем список с буквами и кодами
-            List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(path, N);
+            List<hamming_code.Node> Alphabet = hamming_code.HammingCoding.InputAlphabet(4);
 
             // Ввод матрицы G
             var G = new hamming_code.Matrix(4, 7);
