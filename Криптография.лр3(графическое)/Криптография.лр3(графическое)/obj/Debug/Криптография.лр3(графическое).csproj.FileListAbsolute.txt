@@ -1,0 +1,10 @@
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\bin\Debug\Криптография.лр3(графическое).exe.config
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\bin\Debug\Криптография.лр3(графическое).exe
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\bin\Debug\Криптография.лр3(графическое).pdb
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3(графическое).csprojAssemblyReference.cache
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3_графическое_.Properties.Resources.resources
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3(графическое).csproj.GenerateResource.cache
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3(графическое).csproj.CoreCompileInputs.cache
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3(графическое).exe
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3(графическое).pdb
+C:\Users\evole\source\repos\Криптография.лр3(графическое)\Криптография.лр3(графическое)\obj\Debug\Криптография.лр3.Form1.resources
