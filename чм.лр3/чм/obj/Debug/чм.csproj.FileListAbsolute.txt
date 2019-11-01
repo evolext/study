@@ -1,0 +1,7 @@
+c:\users\temp.nstu.002\source\repos\чм\чм\bin\Debug\чм.exe.config
+c:\users\temp.nstu.002\source\repos\чм\чм\bin\Debug\чм.exe
+c:\users\temp.nstu.002\source\repos\чм\чм\bin\Debug\чм.pdb
+c:\users\temp.nstu.002\source\repos\чм\чм\obj\Debug\чм.csprojAssemblyReference.cache
+c:\users\temp.nstu.002\source\repos\чм\чм\obj\Debug\чм.csproj.CoreCompileInputs.cache
+c:\users\temp.nstu.002\source\repos\чм\чм\obj\Debug\чм.exe
+c:\users\temp.nstu.002\source\repos\чм\чм\obj\Debug\чм.pdb
