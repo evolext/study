@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru ">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+   <title>Web-чат</title>
+   <style>
+      body
+      {
+         background-color: #d99f1a;
+      }
+      #mainField
+      {
+         font-family: 'Oswald', sans-serif;
+         background-color: #e6c16c;
+         width: 60%;
+         position: absolute;
+         left: 20%;
+         height: 5000px;
+         margin-top: 0;
+      }
+      #messForm
+      {
+         float: left;
+         width: 40%;
+      }
+      #messForm p
+      {
+         margin-left: 5px;
+         float: left;
+      }
+      #messForm #username
+      {
+         margin-top: 19px;
+         margin-left: 5px;
+      }
+      #titleMessage
+      {
+         clear: both;
+      }
+      #message
+      {
+         margin-top: -10px;
+         margin-left: 4px;
+         width: 90%;
+         height: 50px;
+      }
+      #chat
+      {
+         padding: 5px;
+         margin-left: 40%;
+         width: 60%;
+         text-align: left; 
+         font-family: 'Roboto Slab', serif;
+      }
+      #submitMessage
+      {
+         margin-left: 162px;
+      }
+      #usersCount
+      {
+         margin: 5px;
+      }
+      #chat div
+      {
+         width: 90%;
+         background-color: #e65535;
+         margin-bottom: 10px;
+         padding: 5px;
+      }
+   </style>
+</head>
+<body>
+   <div id="mainField">
+      <div id="usersCount"></div>
+      <form id="messForm">
+         <p>Имя пользователя: </p>
+         <input type="text" id="username" name="username" placeholder="Укажите имя">
+         <p id="titleMessage">Сообщение</p>
+         <textarea id="message" name="message" placeholder="Введите сообщение"></textarea>
+         <input type="submit" id="submitMessage" value="Отправить сообщение">
+      </form>
+
+      <div id="chat"></div>
+
+   
+   </div>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="/socket.io/socket.io.js"></script>
+
+   <script>
+      $(function() {
+         var socket = io.connect();
+
+         // Запросить количество пользователей в чате
+         socket.emit('request_num_of_users');
+      
+         // Переменные-данные полей <input>
+         var $num_of_users = $("#usersCount")
+         var $form = $("#messForm");
+         var $name = $("#username");
+         var $textbox = $("#message");
+         var $all_messages = $("#chat");
+
+         $form.submit(function(event) {
+            // чтобы не обновлялась страница (стандартное поведение)
+            event.preventDefault();
+            // Вызов события, отправляем текст сообщения
+            socket.emit('send_mess', {msg: $textbox.val(), name: $name.val()});
+
+            // после отправки очищаем поле
+            $textbox.val('');
+         });
+
+         // Получили ответ от сервера, выведем сообщение и отправителя
+         socket.on('set_mess', function (data) {
+            $all_messages.append("<div><b>" + data.name + ": </b>" + data.msg + "</div>");
+         });
+
+         // Вывод текущего количества пользоватлей
+         socket.on('set_num_of_users', function (data) {
+            $num_of_users.text("Текущее число пользователей в чате: " + data);
+         });
+
+      });
+   </script>
+</body>
+</html>
