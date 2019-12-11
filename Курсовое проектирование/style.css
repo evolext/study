@@ -1,0 +1,310 @@
+/* Шапка сайта */
+#header
+{
+   font-size: large;
+   text-align: center;
+}
+#leftSidePanel
+{
+   width: 20%;
+   float: left;
+}
+#boardSpace
+{
+   height: 500px;
+   margin-left: 21%;
+   margin-right: auto;
+}
+body
+{
+   font-family: 'Roboto Slab', serif;
+   background-image: url(images/background.png);
+}
+
+#createNewBoard
+{
+   border: none;
+   font-size: 1.1em;
+   color: white;
+   background-color: rgba(85, 156, 226, 0.671);
+   margin-left: -12px;
+   height: 30px;
+   width: 100%;
+   cursor: pointer;
+}
+/* Стилизация доски задач */
+.taskBoard
+{
+   float: left;
+   margin-left: 10px;
+   margin-top: 10px;
+   margin-bottom: 10px;
+   border-radius: 15px;
+   position: relative;
+   width: 500px;
+   height: 480px;
+   border: 1px solid black;
+}
+.taskBoardTitle
+{
+   border-top-left-radius: 15px;
+   border-top-right-radius: 15px;
+   margin-top: 0;
+   margin-bottom: 0;
+   padding-top: 3px;
+   padding-bottom: 3px;
+   background-color: palegreen;
+   text-align: center;
+}
+.plusIcon
+{
+   margin-top: 4px;
+   margin-left: 7px;
+   position: absolute;
+   cursor: pointer;
+   z-index: 200;
+}
+.threeDotsIcon
+{
+   margin-left: 10px;
+   margin-top: 5px;
+   position: absolute;
+   cursor: pointer;
+}
+.tools li
+{
+   list-style-type: none;
+}
+
+.taskBoardFooter
+{
+   text-align: center;
+   display: block;
+   background-color: palegreen;
+   position: absolute;
+   margin-top: 0;
+   padding-top: 3px;
+   padding-bottom: 3px;
+   width: 500px;
+   border-bottom-left-radius: 15px;
+   border-bottom-right-radius: 15px;
+}
+
+.blackout
+{
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   position: fixed;
+   background: rgba(0, 0, 0, 0.774);
+   z-index: 250;
+}
+
+.tasks
+{
+   height: 425px;
+}
+
+.deskMarking
+{
+   margin-top: 0;
+   font-size: 12px;
+   border-bottom: 1px solid palegreen;
+   margin-bottom: 0;
+}
+.deskMarking span
+{
+   display: inline-block;
+}
+.deskMarkingTitle
+{
+   margin-left: 5%;
+   margin-right: 35%;
+}
+.deskMarkingImport
+{
+   margin-left: 7%;
+}
+
+/* Форма для добавления задачи */
+.addTask
+{
+   padding: 20px;
+   margin-top: -270px;
+   width: 350px;
+   margin-left: -40px;
+   background-color: rgb(214, 203, 203);
+   border-radius: 15px;
+   position: absolute;
+   z-index: 300;
+}
+.taskName
+{
+   width: 100%;
+}
+.taskDescription
+{
+   max-width: 100%;
+   width: 100%;
+}
+.add
+{
+   width: 60%;
+   margin-left: 20%;
+}
+.cancel
+{
+   width: 60%;
+   margin-left: 20%;
+}
+/* Представления отдельной задачи */
+.task
+{
+   cursor: pointer;
+   padding-top: 0;
+   padding-bottom: 5px;
+   border-bottom: 1px solid palegreen;
+   margin: 0;
+}
+
+.taskTitle, .taskDate, .taskImport, .taskTime
+{
+   vertical-align:top;
+   margin-top: 5px;
+   display: inline-block;
+}
+.taskTitle
+{
+   width: 235px;
+}
+.taskDate
+{
+   width: 90px;
+}
+.taskImport
+{
+   margin-left: 50px;
+   width: 20px;
+}
+.taskTime
+{
+   width: 60px;
+}
+
+
+/* Добавление новой доски */
+#addNewDesk
+{
+   z-index: 300;
+   background-color: rgb(148, 148, 231);
+   padding: 10px;
+   width: 350px;
+   position: fixed;
+   border: 1px solid black;
+   border-radius: 10px;
+}
+#deskName
+{
+   width: 100%;
+}
+#addDesk
+{
+   margin-left: 20%;
+}
+#cancelAddDesk
+{
+   margin-left: 20%;
+}
+#blackoutAddDesk
+{
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   position: fixed;
+   background: rgba(0, 0, 0, 0.774);
+   z-index: 250;
+}
+
+#errorAddNewDesk, #successAddNewDesk
+{
+   border: 1px solid black;
+   border-radius: 10px;
+   position: fixed;
+   z-index: 300;
+   background-color: paleturquoise;
+   padding: 10px;
+   left: 30%;
+}
+#closeErrorAddButton, #closeSuccesAddButton
+{
+   width: 20%;
+   margin-left: 40%;
+}
+
+/* Форма для управления доской */
+.deskControl
+{
+   margin-top: 5px;
+   margin-left: 10px;
+   width: 250px;
+   background-color: rgb(214, 203, 203);
+   border-radius: 15px;
+   position: absolute;
+   z-index: 300;
+}
+.deskControl ul li
+{
+   cursor: pointer;
+   list-style-type: none;
+}
+.deskControl ul
+{
+   padding-left: 20px;
+}
+
+.confirmWindow, .notice
+{
+   border: 1px solid black;
+   border-radius: 10px;
+   position: fixed;
+   z-index: 300;
+   background-color: paleturquoise;
+   padding: 10px;
+   left: 30%;
+}
+.yesButton, .cancelButton
+{
+   width: 20%;
+   margin-left: 20%;
+}
+.okButton
+{
+   width: 20%;
+   margin-left: 40%;
+}
+
+input[type="checkbox"]
+{
+   -webkit-appearance: none;
+   width: 14px;
+   height: 14px;
+   border: 1px solid rgba(0,0,0,.3);
+   outline: none;
+   margin-top: 9px;
+   box-sizing: border-box;
+   display: inline-block;
+}
+input[type="checkbox"]:checked:before
+{
+   content:"";
+   display: block;
+   width: 9px;
+   height: 14px;
+   border: 0 solid rgb(58, 153, 45);
+   border-width: 0 2px 2px 0;
+   transform: rotateZ(45deg);
+   margin: -6px 3px;
+   pointer-events: none;
+}

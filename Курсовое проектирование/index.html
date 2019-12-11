@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>
+   <meta charset="UTF-8">
+   <title>Главная страница</title>
+   <link rel="stylesheet" type="text/css" href="style.css">
+   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+   <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+   <!-- Шапка сайта-->
+   <div id="header" ng-controller="title">
+      {{ title }}
+   </div>
+   <!-- Боковая панель -->
+   <div id="leftSidePanel">
+      <!-- Создание новой доски для задач -->
+      <input type="button" value="Создать новую доску для задач" id="createNewBoard" ng-click="openWindowAddDesk()">
+      <div id="addNewDesk" ng-show="showAddDesk">
+         <table>
+            <tr>
+               <td>Название доски:</td>
+               <td><input type="text" placeholder="Введите название доски" id="deskName" ng-model="deskName"></td>
+            </tr>
+            <tr>
+               <td><input type="button" value="Добавить" id="addDesk" ng-click="checkData()"></td>
+               <td><input type="button" value="Отмена" id="cancelAddDesk" ng-click="closeWindowAddDesk()"></td>
+            </tr>
+         </table>
+      </div>
+   </div>
+
+   <!-- Тут собраны все уведомления, появляющиеся на сайте -->
+   <div>
+      <!-- Затемнение -->
+      <div id="blackoutAddDesk" ng-show="showBlackout"></div>
+      <!-- Окно ошибки при добавлении -->
+      <div id="errorAddNewDesk" ng-show="errorAddDesk">
+         <p>Ошибка: вы должны указать название доски!</p>
+         <input type="button" value="ок" id="closeErrorAddButton" ng-click="closeWindowErrorAddDesk()">
+      </div>
+      <!-- Окно уведомления о добавлении -->
+      <div class="notice" ng-show="successAddDesk">
+         <p>Уведомление: новая доска успешно доабвлена</p>
+         <input type="button" value="ок" id="closeSuccesAddButton" ng-click="closeWindowSuccesAddDesk()">
+      </div>
+      <!-- Окно для подтверждения или отмены удаления доски -->
+      <div class="confirmWindow" ng-show="showConfirmDeleteDesk">
+         <p>Вы действительно хотите удалить эту доску?</p>
+         <input type="button" value="Да" class="yesButton" ng-click="confirmDeleteDesk()">
+         <input type="button" value="Отмена" class="cancelButton" ng-click="cnacelDeleteDesk()">
+      </div>
+      <!-- Уведомление об успешном удалениии доски -->
+      <div class="notice" ng-show="showSuccesDeleteDesk">
+         <p>Уведомление: доска успешно удалена</p>
+         <input type="button" value="ок" class="okButton" ng-click="closeWindowSuccesDeleteDesk()">
+      </div>
+   </div>
+
+   <!-- Поле для показа досок -->
+   <div id="boardSpace">
+      <!-- Макет доски -->
+      <div class="taskBoard" ng-repeat="desk in desks">
+         <img class="threeDotsIcon" src="images/three_dots.png" width="20px" height="20px" ng-mouseover="showDeskControl = true">
+         <div class="deskControl" ng-show="showDeskControl" ng-mouseleave="showDeskControl = false">
+            <ul>
+               <li>Сортировать задачи по...</li>
+               <ul class="sortTypes">
+                  <li>Порядку добавления</li>
+                  <li>Степени важности</li>
+                  <li>Срокам выполнения</li>
+               </ul>
+               <li ng-click='deleteDesk(desk.id)'>Удалить доску</li>   
+            </ul>
+         </div>
+         <p class="taskBoardTitle">{{ desk.name }}</p>
+         <div class="tasks">
+            <p class="deskMarking"><span class="deskMarkingTitle">Название</span><span>Срок выполнения</span><span class="deskMarkingImport">Важность</span></p>
+            <!-- Вывод задач в доску -->
+            <p class="task" ng-repeat="task in desks[desk.id].tasks"><input type="checkbox"> <span class="taskTitle">{{ task.name }}</span><span class="taskDate">{{task.date.day}}:{{task.date.month}}:{{task.date.year}}</span><span class="taskTime">{{task.date.hour}}:{{task.date.minute}}</span><span class="taskImport">{{task.importance}}</span></p>
+         </div>
+         <img class="plusIcon" src="images/plus.png" width="20px" height="20px" ng-click="showAddTaskBlock = true">
+         <p class="taskBoardFooter">Создать задачу</p>
+         <div class="addTask" ng-show="showAddTaskBlock">
+            <table>
+               <tr>
+                  <td>Название:</td>
+                  <td><input type="text" placeholder="укажите название задачи" class="taskName" ng-model="$parent.taskName"></td>
+               </tr>
+               <tr>
+                  <td>Срок выполнения:</td>
+                  <td><input type="datetime-local" ng-model="$parent.taskDate"></td>
+               </tr>
+               <tr>
+                  <td>Степень важности:</td>
+                  <td><input type="range" min="1" max="5" value="3" step="1" ng-model="val"> {{ val }}</td> 
+               </tr>
+               <tr>
+                  <td colspan="2">Описание задачи:</td>
+               </tr>
+               <tr>
+                  <td colspan="2">
+                     <textarea class="taskDescription"></textarea>
+                  </td>
+               </tr>
+               <tr>
+                  <td><input type="button" value="Добавить" class="add" ng-click="processingAddTask(desk.id)"></td>
+                  <td><input type="button" value="Отменить" class="cancel" ng-click="showAddTaskBlock = false"></td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </div>
+   
+   
+   <script>
+      // Инициализируем свое приложение
+      var myApp = angular.module('myApp', []);
+   </script>
+   <script src="controllers.js"></script>
+</body>
+</html>
