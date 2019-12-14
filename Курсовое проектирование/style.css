@@ -130,10 +130,9 @@ body
 /* Форма для добавления задачи */
 .addTask
 {
+   margin-left: 40%;
    padding: 20px;
-   margin-top: -270px;
    width: 350px;
-   margin-left: -40px;
    background-color: rgb(214, 203, 203);
    border-radius: 15px;
    position: absolute;
@@ -145,6 +144,7 @@ body
 }
 .taskDescription
 {
+   resize: none;
    max-width: 100%;
    width: 100%;
 }
@@ -227,7 +227,7 @@ body
    z-index: 250;
 }
 
-#errorAddNewDesk, #successAddNewDesk
+#errorAddNewDesk, #successAddNewDesk, #errorAddNewTaskName, #errorAddNewTaskDate
 {
    border: 1px solid black;
    border-radius: 10px;
@@ -237,7 +237,7 @@ body
    padding: 10px;
    left: 30%;
 }
-#closeErrorAddButton, #closeSuccesAddButton
+#closeErrorAddButton, #closeSuccesAddButton, #closeErrorAddTaskName, #closeErrorAddTaskDate
 {
    width: 20%;
    margin-left: 40%;
@@ -307,4 +307,110 @@ input[type="checkbox"]:checked:before
    transform: rotateZ(45deg);
    margin: -6px 3px;
    pointer-events: none;
+}
+
+
+.taskInfo, #windowEditTask
+{
+   margin-left: 45%;
+   margin-top: 5%;
+   border: 1px solid black;
+   border-radius: 15px;
+   width: 300px;
+   position: fixed;
+   z-index: 200;
+   background-color: rgb(148, 148, 231);
+}
+.taskInfoTitle, .taskInfoDate, .taskInfoImport
+{
+   font-size: 14px;
+}
+.taskInfoTitle
+{
+   margin-left: 25px;
+}
+.taskInfoDate, .taskInfoImport
+{
+   margin-left: 5px;
+}
+.taskInfoDescrip
+{
+   margin-left: 3px;
+   margin-bottom: 10px;
+   width: 250px;
+   height: 50px;
+   resize: none;
+}
+.descriptionIcon
+{
+   float: left;
+   margin-left: 8px;
+   margin-right: 0;
+}
+.pencilIcon
+{
+   cursor: pointer;
+   position: absolute;
+   margin-left: 230px;
+   margin-top: 1px;
+}
+.trashIcon
+{
+   cursor: pointer;
+   position: absolute;
+   margin-left: 255px;
+   margin-top: 3px;
+}
+.crossIcon
+{
+   cursor: pointer;
+   position: absolute;
+   margin-left: 278px;
+   margin-top: 5px;
+}
+
+/* Окно редактирования задачи */
+#windowEditTaskTitle
+{
+   margin-left: 25px;
+   border: 1px solid black;
+   background-color: rgb(148, 148, 231);
+}
+#windowEditTaskDate
+{
+   width: 173px;
+   border: none;
+   background-color: rgb(148, 148, 231);
+}
+#windowEditTaskImport
+{
+   border: none;
+   border-bottom: 1px solid black;
+   width: 30px;
+   background-color: rgb(148, 148, 231);
+}
+#widowInfoTaskDate
+{
+   margin-left: 5px;
+}
+#windowEditTaskDescrip
+{
+   margin-left: 3px;
+   margin-bottom: 10px;
+   width: 250px;
+   height: 50px;
+   resize: none;
+}
+#saveEditTask, #cancelEditTask
+{
+   width: 30%;
+   margin-bottom: 15px;
+}
+#saveEditTask
+{
+   margin-left: 17%;
+}
+#cancelEditTask
+{
+   margin-left: 5%;
 }

@@ -33,10 +33,19 @@
    <div>
       <!-- Затемнение -->
       <div id="blackoutAddDesk" ng-show="showBlackout"></div>
-      <!-- Окно ошибки при добавлении -->
+      <!-- Окно ошибки при добавлении доски -->
       <div id="errorAddNewDesk" ng-show="errorAddDesk">
          <p>Ошибка: вы должны указать название доски!</p>
          <input type="button" value="ок" id="closeErrorAddButton" ng-click="closeWindowErrorAddDesk()">
+      </div>
+      <!-- Окно ошибки при добавлении задачи -->
+      <div id="errorAddNewTaskName" ng-show="showErrorAddTaskName">
+         <p>Ошибка: вы должны указать название задачи!</p>
+         <input type="button" value="ок" id="closeErrorAddTaskName" ng-click="closeWindowErrorAddTaskName()">
+      </div>
+      <div id="errorAddNewTaskDate" ng-show="showErrorAddTaskDate">
+         <p>Ошибка: срок выполнения задачи уже прошел!</p>
+         <input type="button" value="ок" id="closeErrorAddTaskDate" ng-click="closeWindowErrorAddTaskDate()">
       </div>
       <!-- Окно уведомления о добавлении -->
       <div class="notice" ng-show="successAddDesk">
@@ -49,10 +58,77 @@
          <input type="button" value="Да" class="yesButton" ng-click="confirmDeleteDesk()">
          <input type="button" value="Отмена" class="cancelButton" ng-click="cnacelDeleteDesk()">
       </div>
+      <!-- Окно для подтверждения или отмены удаления задачи -->
+      <div class="confirmWindow" ng-show="showConfirmDeleteTask">
+         <p>Вы действительно хотите удалить эту задачу?</p>
+         <input type="button" value="Да" class="yesButton" ng-click="confirmDeleteTask()">
+         <input type="button" value="Отмена" class="cancelButton" ng-click="cnacelDeleteTask()">
+      </div>
       <!-- Уведомление об успешном удалениии доски -->
       <div class="notice" ng-show="showSuccesDeleteDesk">
          <p>Уведомление: доска успешно удалена</p>
          <input type="button" value="ок" class="okButton" ng-click="closeWindowSuccesDeleteDesk()">
+      </div>
+      <!-- Уведомление об успешном удалениии задачи -->
+      <div class="notice" ng-show="showSuccesDeleteTask">
+         <p>Уведомление: задача успешно удалена</p>
+         <input type="button" value="ок" class="okButton" ng-click="closeWindowSuccesDeleteTask()">
+      </div>
+      <!-- Окно вывода информации по задаче -->
+      <div class="taskInfo" ng-show="showTaskInfo">
+         <img src="images/pencil.png" width="20px" height="20px" class="pencilIcon" ng-click="openWindowEditTask(taskInfoId, taskInfoDeskId)">
+         <img src="images/trash.png" width="17px" height="17px" class="trashIcon" ng-click="deleteTaskFromDesk(taskInfoDeskId, taskInfoId)">
+         <img src="images/cross.png" width="15px" height="15px" class="crossIcon" ng-click="closeInfoAboutTask()">
+         <p class="taskInfoTitle" ng-model="taskInfoTitle"> {{taskInfoTitle}}</p>
+         <p class="taskInfoDate" ng-model="taskInfoDate"><img src="images/clock.png" width="17px" height="17px"> Срок сдачи: {{taskInfoDate}}</p>
+         <p class="taskInfoImport" ng-model="taskInfoImport"><img src="images/inportance.png" width="17px" height="17px"> Степень важности: {{taskInfoImport}}</p>
+         <img src="images/description.png" width="15px" height="15px" class="descriptionIcon">
+         <textarea class="taskInfoDescrip" ng-model="taskInfoDescrip">{{taskInfoDescrip}}</textarea>
+         <input type="text" ng-model="taskInfoId" value="taskInfoId" style="display: none;">
+         <input type="text" ng-model="taskInfoDeskId" value="taskInfoDeskId" style="display: none;">
+      </div>
+      <!-- Окно редактирования информации по задаче -->
+      <div id="windowEditTask" ng-show="showWindowEditTask">
+         <input type="text" value="editTaskInfoTitle" id="windowEditTaskTitle" autofocus ng-model="editTaskInfoTitle">
+         <p id="widowInfoTaskDate"><img src="images/clock.png" width="17px" height="17px"> Срок сдачи:
+            <input type="datetime-local" id="windowEditTaskDate" ng-model="editTaskInfoDate"></p>
+         <p class="taskInfoImport"><img src="images/inportance.png" width="17px" height="17px">
+            Степень важности: <input type="number" min="1" max="5" id="windowEditTaskImport" ng-model="editTaskInfoImport" value="editTaskInfoImport"></p>
+         <img src="images/description.png" width="15px" height="15px" class="descriptionIcon">
+         <textarea id="windowEditTaskDescrip" ng-model="editTaskInfoDescrip">{{editTaskInfoDescrip}}</textarea>
+
+          <input type="button" value="Сохранить" id="saveEditTask" ng-click="saveEditTaskChange(taskInfoDeskId,taskInfoId)">
+          <input type="button" value="Отмена" id="cancelEditTask" ng-click="closeWindowEditTask()">
+      </div>
+      <!-- Окно добавления задачи на доску -->
+      <div class="addTask" ng-show="showAddTaskBlock">
+         <table>
+            <tr>
+               <td>Название:</td>
+               <td><input type="text" placeholder="укажите название задачи" class="taskName" ng-model="taskName"></td>
+            </tr>
+            <tr>
+               <td>Срок выполнения:</td>
+               <td><input type="datetime-local" ng-model="taskDate"></td>
+            </tr>
+            <tr>
+               <td>Степень важности:</td>
+               <td><input type="range" min="1" max="5" value="3" step="1" ng-model="val"> {{ val }}</td>
+            </tr>
+            <tr>
+               <td colspan="2">Описание задачи:</td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <textarea class="taskDescription" ng-model="$parent.description"></textarea>
+               </td>
+            </tr>
+            <tr>
+               <td><input type="button" value="Добавить" class="add" ng-click="processingAddTask(addTaskDeskId, val)"></td>
+               <td><input type="button" value="Отменить" class="cancel" ng-click="closeWindowAddtaskBlock()"></td>
+            </tr>
+         </table>
+         <input type="text" ng-model="addTaskDeskId" value="addTaskDeskId" style="display: none;">
       </div>
    </div>
 
@@ -65,9 +141,9 @@
             <ul>
                <li>Сортировать задачи по...</li>
                <ul class="sortTypes">
-                  <li>Порядку добавления</li>
-                  <li>Степени важности</li>
-                  <li>Срокам выполнения</li>
+                  <li ng-click="sortTasksByAdding(desk.id)">Порядку добавления</li>
+                  <li ng-click="sortTasksByImportance(desk.id)">Степени важности</li>
+                  <li ng-click="sortTasksByTime(desk.id)">Срокам выполнения</li>
                </ul>
                <li ng-click='deleteDesk(desk.id)'>Удалить доску</li>   
             </ul>
@@ -76,38 +152,10 @@
          <div class="tasks">
             <p class="deskMarking"><span class="deskMarkingTitle">Название</span><span>Срок выполнения</span><span class="deskMarkingImport">Важность</span></p>
             <!-- Вывод задач в доску -->
-            <p class="task" ng-repeat="task in desks[desk.id].tasks"><input type="checkbox"> <span class="taskTitle">{{ task.name }}</span><span class="taskDate">{{task.date.day}}:{{task.date.month}}:{{task.date.year}}</span><span class="taskTime">{{task.date.hour}}:{{task.date.minute}}</span><span class="taskImport">{{task.importance}}</span></p>
+            <p class="task" ng-repeat="task in desks[desk.id].tasks" ng-click="showInfoAboutTask(desk.id, task.id)"><input type="checkbox"> <span class="taskTitle">{{ task.name }}</span><span class="taskDate">{{task.date.day}}:{{task.date.month}}:{{task.date.year}}</span><span class="taskTime">{{task.date.hour}}:{{task.date.minute}}</span><span class="taskImport">{{task.importance}}</span></p>
          </div>
-         <img class="plusIcon" src="images/plus.png" width="20px" height="20px" ng-click="showAddTaskBlock = true">
-         <p class="taskBoardFooter">Создать задачу</p>
-         <div class="addTask" ng-show="showAddTaskBlock">
-            <table>
-               <tr>
-                  <td>Название:</td>
-                  <td><input type="text" placeholder="укажите название задачи" class="taskName" ng-model="$parent.taskName"></td>
-               </tr>
-               <tr>
-                  <td>Срок выполнения:</td>
-                  <td><input type="datetime-local" ng-model="$parent.taskDate"></td>
-               </tr>
-               <tr>
-                  <td>Степень важности:</td>
-                  <td><input type="range" min="1" max="5" value="3" step="1" ng-model="val"> {{ val }}</td> 
-               </tr>
-               <tr>
-                  <td colspan="2">Описание задачи:</td>
-               </tr>
-               <tr>
-                  <td colspan="2">
-                     <textarea class="taskDescription"></textarea>
-                  </td>
-               </tr>
-               <tr>
-                  <td><input type="button" value="Добавить" class="add" ng-click="processingAddTask(desk.id)"></td>
-                  <td><input type="button" value="Отменить" class="cancel" ng-click="showAddTaskBlock = false"></td>
-               </tr>
-            </table>
-         </div>
+         <img class="plusIcon" src="images/plus.png" width="20px" height="20px" ng-click="openWindowAddTaskBlock(desk.id)">
+         <p class="taskBoardFooter">Создать задачу</p> 
       </div>
    </div>
    
