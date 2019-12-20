@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DrawIO</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Панель инструментов -->
+    <div class="options">
+        <p style="text-align: center; margin-top: 0; margin-bottom: 3px;">Цвета:</p>
+        <input id="yellow" type="button">
+        <input id="red" type="button">
+        <input id="green" type="button">
+        <input id="blue" type="button">
+        <input id="black" type="button"><br>
+        <input id="white" type="button">
+        <input id="pink" type="button">
+        <input id="purple" type="button">
+        <input id="gray" type="button">
+        <input id="brown" type="button"><br>
+        <span>Ширина линии:</span>
+        <input id="plussize" type="button" value="+">
+        <span id="thns"></span>
+        <input id="minussize" type="button" value="-"><br><br>
+        <input id="clear" type="button" value="Очистить полотно">
+    </div>
+    <!-- Само полотно для рисования -->
+    <canvas id="canvas">/Your brawser doesn't supported for canvas./</canvas>
+    
+        
+    <script>
+        $(function() {
+        var
+            socket = io.connect();
+            canv = document.getElementById('canvas'),
+            ctx = canv.getContext('2d');
+            isMouseDown = false; // переменная для проверки нажатия клавиши
+            //задаем высоту и ширину холста по всему экрану
+            canv.width = window.innerWidth;
+            canv.height = window.innerHeight;
+            thickness = 5;
+
+            // Запрос заднего фона полотна, чтобы можно было видеть рисунки, созданны другими до подключения
+            socket.emit('getback');
+            // Установка запрошенного заднего фона
+            socket.on('setbackground', function (data) {
+                var img = new Image();
+                img.src = data;
+
+                ctx.drawImage(img, 0, 0);
+            });
+
+            // Фрагмент кода, отвечающий за рисование различными цветами
+            document.getElementById("thns").innerHTML = thickness;
+            yellow.onclick = function(){
+                ctx.fillStyle = "rgb(255, 255, 0)";
+                ctx.strokeStyle = "rgb(255, 255, 0)";
+            };
+            red.onclick = function(){
+                ctx.fillStyle = "rgb(255, 0, 0)";
+                ctx.strokeStyle = "rgb(255, 0, 0)";
+            };
+            green.onclick = function(){
+                ctx.fillStyle = "rgb(0, 255, 0)";
+                ctx.strokeStyle = "rgb(0, 255, 0)";
+            };
+            blue.onclick = function(){
+                ctx.fillStyle = "rgb(0, 0, 255)";
+                ctx.strokeStyle = "rgb(0, 0, 255)";
+            };
+            black.onclick = function(){
+                ctx.fillStyle = "rgb(0, 0, 0)";
+                ctx.strokeStyle = "rgb(0, 0, 0)";
+            };
+            white.onclick = function () {
+                ctx.fillStyle = "rgb(255, 255, 255)";
+                ctx.strokeStyle = "rgb(255, 255, 255)";
+            };
+            pink.onclick = function () {
+                ctx.fillStyle = "rgb(255, 0, 212)";
+                ctx.strokeStyle = "rgb(255, 0, 212)";
+            };
+            purple.onclick = function () {
+                ctx.fillStyle = "rgb(204, 0, 255)";
+                ctx.strokeStyle = "rgb(204, 0, 255)";
+            };
+            gray.onclick = function () {
+                ctx.fillStyle = "rgb(138, 138, 138)";
+                ctx.strokeStyle = "rgb(138, 138, 138)";
+            };
+            brown.onclick = function () {
+                ctx.fillStyle = "rgb(101, 67, 33)";
+                ctx.strokeStyle = "rgb(101, 67, 33)";
+            };
+            plussize.onclick = function(){
+                thickness++;
+                document.getElementById("thns").innerHTML = thickness;
+            };
+            minussize.onclick = function(){
+                if(thickness > 1)
+                     thickness--;
+                document.getElementById("thns").innerHTML = thickness;
+            };
+            // Событие, когда мышь нажата
+            canv.addEventListener('mousedown', function(){
+                isMouseDown = true;
+            });
+            // Событие когда мышь отжата
+            canv.addEventListener('mouseup', function(){
+                isMouseDown = false;
+                ctx.beginPath();
+                socket.emit('sendcanvas', { X: 0, Y: 0, Thickness: thickness, isM: isMouseDown });
+            });
+            canv.addEventListener('mousemove', function(e){
+                if(isMouseDown)
+                {
+                    // Задаем ширину линии равную двойному радиусу рисуемой окружности 
+                    //чтобы линии была без прорезей
+                    ctx.lineWidth = thickness * 2;
+                    //проводим линию к новой точке
+                    ctx.lineTo(e.clientX, e.clientY);
+                    ctx.stroke();
+                    //рисуем окружность
+                    ctx.beginPath();
+                    ctx.arc(e.clientX, e.clientY, thickness, 0, Math.PI * 2);
+                    ctx.fill();
+                        
+                    ctx.beginPath();
+                    ctx.moveTo(e.clientX, e.clientY);
+                        
+                    socket.emit('sendcanvas', { X: e.clientX, Y: e.clientY, Thickness: thickness, isM: isMouseDown});
+                    socket.emit('sendbackground', document.getElementById('canvas').toDataURL("image/png"));
+                }
+            });
+
+            // Вызов события "очистка полотна"
+            clear.onclick = function(){
+                socket.emit('sendcls');
+            };
+            // Ответ на вызов события "очистка полотна" со стороны сервера
+            socket.on('setcls', function(){
+                ctx.clearRect(0, 0, canv.width, canv.height);
+                socket.emit('sendbackground', document.getElementById('canvas').toDataURL("image/png"));
+            });
+            // Установка на полотне нарисованных линий
+            socket.on('setcanvas',function(data)
+            {
+                if(!data.isM)
+                    ctx.beginPath();
+                else
+                {
+                    var color = ctx.fillStyle;
+                    ctx.fillStyle = "rgb(0, 0, 0)";
+                    ctx.strokeStyle = "rgb(0, 0, 0)";
+
+                    //задем ширину линии равную двойному радиусу рисуемой окружности 
+                    //чтобы линии была без прорезей
+                    ctx.lineWidth = data.Thickness * 2;
+                    //проводим линию к новой точке
+                    ctx.lineTo(data.X, data.Y);
+                    ctx.stroke();
+                    //рисуем окружность
+                    ctx.beginPath();
+                    ctx.arc(data.X, data.Y, data.Thickness, 0, Math.PI * 2);
+                    ctx.fill();
+                            
+                    ctx.beginPath();
+                    ctx.moveTo(data.X, data.Y);
+
+                    ctx.fillStyle = color;
+                    ctx.strokeStyle = color;
+                }
+            });            
+        });
+    </script>
+</body>
+</html>
