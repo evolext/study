@@ -14,6 +14,7 @@ var io = require('socket.io').listen(server);
 app.use(express.static(path.join(__dirname, 'public')));
 //задаем какой порт будет отслеживать наш сервер
 server.listen(3000);
+
 //прописываем какие конкретно url-адреса мы отслеживаем
 app.get('/', function(request, respons){
     respons.sendFile(__dirname + '/drawing.html');
@@ -22,17 +23,14 @@ app.get('/', function(request, respons){
 // Конвертация изначального заднего фона полотна
 var dataImg = base64Img.base64Sync('public/back.png');
 
+
 //массивы содержащие текущих пользователей чата и подключения
-//users = [];
 connections = [];
 
 //отслеживаем событие connection(подключение пользователя)
 io.sockets.on('connection', function(socket) {
     //добавляем нового пользователя
     connections.push(socket);
-
-    // Установка заднего фона у пользователей
-    socket.emit('setbackground', dataImg);
 
     //удаляем соединение из массива connections в случае отключение пользователя от сервера(событие disconnect)
     socket.on('disconnect', function(data) {

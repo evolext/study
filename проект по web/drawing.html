@@ -6,6 +6,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var img = new Image();
+    </script>
+
 </head>
 <body>
     <!-- Панель инструментов -->
@@ -42,15 +46,18 @@
             canv.width = window.innerWidth;
             canv.height = window.innerHeight;
             thickness = 5;
+            
 
-            // Запрос заднего фона полотна, чтобы можно было видеть рисунки, созданны другими до подключения
-            socket.emit('getback');
+            //Запрос заднего фона полотна, чтобы можно было видеть рисунки, созданны другими до подключения
+            img.onload = function () {
+                socket.emit('getback');          
+            } 
+            
+
             // Установка запрошенного заднего фона
             socket.on('setbackground', function (data) {
-                var img = new Image();
                 img.src = data;
-
-                ctx.drawImage(img, 0, 0);
+                ctx.drawImage(img, 0, 0);  
             });
 
             // Фрагмент кода, отвечающий за рисование различными цветами
@@ -131,7 +138,7 @@
                     ctx.beginPath();
                     ctx.moveTo(e.clientX, e.clientY);
                         
-                    socket.emit('sendcanvas', { X: e.clientX, Y: e.clientY, Thickness: thickness, isM: isMouseDown});
+                    socket.emit('sendcanvas', { X: e.clientX, Y: e.clientY, Thickness: thickness, isM: isMouseDown });
                     socket.emit('sendbackground', document.getElementById('canvas').toDataURL("image/png"));
                 }
             });
