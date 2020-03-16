@@ -1,0 +1,87 @@
+body
+{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+#main
+{
+    position: absolute;
+    left: 0;
+    right: 30%;
+    background-image: linear-gradient(rgb(81, 83, 228), rgb(26, 191, 241));
+    padding: 2%;
+}
+a
+{
+    text-decoration: none;
+}
+div
+{
+    text-indent: 3%;
+    text-align: justify;
+}
+img
+{
+    float: left;
+}
+#group
+{
+    float: none;
+    margin-right: 0;
+}
+.study
+{
+    clear: both;
+}
+.intro
+{
+    margin-top: 5px; 
+}
+.childhood
+{
+    padding-bottom: 0;
+}
+figcaption
+{
+    color: rgb(14, 19, 17);
+    font-size: 0.8em;
+    width: 70%;
+    position: relative;
+    left: 3%; 
+}
+figure
+{
+    position: relative;
+    left: 10%;
+}
+a:hover
+{
+    color: rgb(199, 27, 27);
+}
+#comments
+{
+    position: absolute;
+    left: 70%;
+    right: 0;
+    background-image: linear-gradient(rgb(65, 216, 133), rgb(26, 191, 241));
+    height: 100%;
+}
+#nameLabel
+{
+    margin-left: 2%;
+}
+#textLabel
+{
+    margin-left: 2%;
+    margin-right: 2%;
+    float: left;
+}
+#messageForm
+{
+    resize: none;
+    width: 80%;
+    height: 100px;
+}
+#comments input[type="submit"]
+{
+    margin-left: 55%;
+}

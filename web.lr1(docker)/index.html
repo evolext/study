@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<head>
+   <meta charset="UTF-8">
+   <title>Моя страница</title>
+   <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+   <div id="main">
+      <div class="intro">
+         Меня зовут Хуснутдинов Александр.
+         В данный момент я учусь в Новосибирском Государственном Техническом Университете (вы видели новый <a href="https://www.nstu.ru/" id="nstu">сайт</a>?!) на факультете прикладной математики и информатики по специальности математическое обеспечение и администрирование инфомрмационных систем.
+      </div>
+      <div class="childhood">
+         Родился в городе Новокузнецке, что в Кемеровской области, в 1999 году (ребенок 90-х).
+         Учился в самой обычной средней школе номер 47, вот её <a href="http://lits47.ucoz.ru/">"прекрасный" сайт</a>.
+         Учился всегда хорошо, больше тянуло к математике и физике. В 10 классе принял самостоятельное решение поступить в НГТУ на направление, указанное выше (очень уж оно длинное).
+      </div>
+      <div class="study">
+         На всеми нелюбимом ЕГЭ сдавал Информатику и Физику + обязательные предметы.
+         Сдал не то чтобы очень хорошо, но для переезда в Новосибирск было достаточно, баллов хватало поступить на механико-математический факультет НГУ, но по профильной физике, чего не хотел,  а на прикладную математику баллов не добрал, решил не менять решения и поступать в НГТУ. 
+      </div>
+      <figure> 
+               <img src="group.jpg" id="group" width="70%">
+               <figcaption>Это моя группа на первое сентрября(больше половины уже не учится с нами)</figcaption> 
+      </figure>
+
+      <div class="study">
+         Учиться, в целом, очень нравится, нет ощущения бесполезности или ненужности учебы (как у многих моих сверстников в других ВУЗах) и не считаю какой-либо предмет лишним (даже историю от <a href="https://ciu.nstu.ru/kaf/persons/21451">Кулешова</a>).
+         В данный момент так и не определился с направлением в профессии, так как много что нравится, хотя уже пора бы решить, 3 курс как никак...
+      </div>
+   </div>
+   <div id="comments">
+      <p>Тут вы можете оставить комментарии...</p>
+      <form id="sendMessageForm">
+         <p id="nameLabel">Имя: <input type="text" id="userName"></p>
+         <p id="textLabel">Текст: </p>
+         <textarea placeholder="Сообщение" id="messageForm"></textarea>
+         <input type="submit" value="Отправить комментарий">
+         <div id="messages">
+         </div>
+      </form>
+   </div>
+
+   <!-- Подключение библиотек jQuery и socket.io -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="/socket.io/socket.io.js"></script>
+
+   <script>
+      $(function() {
+         var socket = io.connect();
+
+         var $form = $("#sendMessageForm");
+         var $name = $("#userName");
+         var $message = $("#messageForm");
+         var $messages = $("#messages");
+
+         $form.submit(function(event) {
+            // чтобы не обновлялась страница (стандартное поведение)
+            event.preventDefault();
+
+            if ($name[0].value === "" || $name[0].value === undefined || $message[0].value === undefined || $message[0].value === "") 
+               alert('Ошибка: Одно из полей незаполнено!');
+            else
+               // Вызов события, отправляем текст сообщения
+               socket.emit('send_mess', { name: $name[0].value, comment: $message[0].value});
+         });
+
+         socket.on('set_mess', function (data) {
+            $messages.append("<div><b>" + data.name + ": </b>" + data.comment + "</div>");
+         });
+
+
+      });
+   </script>
+
+
+</body>
+</html>
