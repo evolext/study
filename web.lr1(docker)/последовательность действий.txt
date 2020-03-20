@@ -1,0 +1,28 @@
+1. Была создана сеть
+    docker network create app-net
+
+2. Запуск контейнера с БД
+    docker run -d -p 27017:27017 --network=app-net --name my-mongo mongo:3
+
+3. Создание образа своего контейнеа и его Запуск
+    sudo docker build -t my-image .
+    sudo docker run -d -p 3003:3003 --name my-container --network=app-net my-image
+
+4. Содержимое лога
+    node:1) DeprecationWarning: current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
+    Connected to MongoDB server
+    /app/node_modules/mongodb/lib/utils.js:725
+            throw error;
+            ^
+
+    TypeError: Cannot read property 'db' of undefined
+        at /app/index.js:28:25
+        at /app/node_modules/mongodb/lib/utils.js:722:9
+        at /app/node_modules/mongodb/lib/mongo_client.js:216:23
+        at connectCallback (/app/node_modules/mongodb/lib/operations/connect.js:350:5)
+        at /app/node_modules/mongodb/lib/operations/connect.js:417:14
+        at Server.<anonymous> (/app/node_modules/mongodb/lib/topologies/server.js:230:11)
+        at Object.onceWrapper (events.js:418:26)
+        at Server.emit (events.js:311:20)
+        at Pool.<anonymous> (/app/node_modules/mongodb/lib/core/topologies/server.js:436:21)
+        at Pool.emit (events.js:311:20)
