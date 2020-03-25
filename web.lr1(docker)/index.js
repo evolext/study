@@ -8,7 +8,7 @@ const fs = require("fs");
 var MongoClient = require('mongodb').MongoClient;
 
 // Путь до БД
-var path = "mongodb://localhost:27017/";
+var path = "mongodb://db:27017/";
 
 server.listen(3003);
 
@@ -21,46 +21,30 @@ app.get('/', function(request, response) {
 
 io.sockets.on('connection', function (socket) {
 
-    // Тут должен быть вывод комментариев из БД, но пока даже не получается писоединиться
+    // Вывод комментариев из БД
     MongoClient.connect(path, function (err, client) {
-        console.log('Connected to MongoDB server');
 
-        var db = client.db('config');
-        // var db = client.db('comments');
+        var db = client.db('database');
 
-        // db.collection('comments').find({}).toArray(function (err, result) {
-        //    if (err) throw err;
-  
-        //    for (let i = 0; i < result.length; i++)
-        //       socket.emit('set_mess', { "name": result[i]["name"], "comment": result[i]["comment"] });
-  
-        // });
+        db.collection('comments').find({}).toArray(function (err, result) {
+            if (err) throw err;
+
+            for (let i = 0; i < result.length; i++)
+               socket.emit('set_mess', { "name": result[i]["name"], "comment": result[i]["comment"] }); 
+        });
         client.close();
     });
-
-    // Вывод комментариев из БД (вариант с текстовым файлом)
-    // var data = fs.readFileSync("info/test.txt", "utf8", function() {});
-    // var split_lines = data.split('\n');
-    // for (let i = 0; i < split_lines.length - 1; i++)
-    // {
-    //     socket.emit('set_mess', { "name": split_lines[i].split('\t')[0], "comment": split_lines[i].split('\t')[1]});
-    // }
-
 
     // Сервер получает сообщение от клиента
     socket.on('send_mess', function (data) {
 
         // Добавление комментария в базу данных
-        // MongoClient.connect(path, function (err, client) {
-        //     var db = client.db('database');
-        //     var collection = db.collection('comments')
-        //     collection.insertOne(data);
-        //     client.close();
-        //  });
-
-        // Добавление комментария в базу данных (варриант с текстовым файлом)
-        //fs.appendFile("info/test.txt", data.name + '\t' + data.comment + '\n', function() {});
-
+        MongoClient.connect(path, function (err, client) {
+            var db = client.db('database');
+            var collection = db.collection('comments')
+            collection.insertOne(data);
+            client.close();
+         });
 
         // Отображение комментария на странице
         io.sockets.emit('set_mess', data);
